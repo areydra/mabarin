@@ -10,7 +10,6 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'firebase';
 
 const {width, height} = Dimensions.get('window');

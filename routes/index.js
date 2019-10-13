@@ -1,61 +1,147 @@
-import { createStackNavigator } from 'react-navigation-stack'
-import { createBottomTabNavigator } from 'react-navigation-tabs'
-import { createAppContainer, createSwitchNavigator } from 'react-navigation'
+import React from 'react';
 
-import { BuyPremium, Chat, Events, Home, Login, MabarHistory, Maps, More, Profile, Register, SplashScreen } from '../screens'
+import {createStackNavigator} from 'react-navigation-stack';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import {Icon} from 'native-base';
 
-import { Dimensions } from 'react-native'
-const { width } = Dimensions.get('window')
+import {
+  BuyPremium,
+  Chat,
+  Events,
+  Home,
+  Login,
+  MabarHistory,
+  Maps,
+  More,
+  Profile,
+  Register,
+  SplashScreen,
+} from '../screens';
 
-const HomeStack = createStackNavigator({
-    Home, Events, BuyPremium, Maps, Chat
-},{
-    initialRouteName : 'Home',
-    headerMode : 'none'
-})
+import {Dimensions} from 'react-native';
+const {width} = Dimensions.get('window');
 
-const MoreStack = createStackNavigator({
-    More, Profile
-},{
-    initialRouteName: 'More',
-    headerMode: 'none'
-})
-
-const AuthStack = createStackNavigator({
-    Login, Register
-},{
-    initialRouteName: 'Login',
-    headerMode: 'none'
-})
-
-const NavigationStack = createBottomTabNavigator({
-   Home: HomeStack, 
-   History : MabarHistory, 
-   More : MoreStack
-},{
+const HomeStack = createStackNavigator(
+  {
+    Home,
+    Events,
+    BuyPremium,
+    Maps,
+    Chat,
+  },
+  {
     initialRouteName: 'Home',
-    activeTintColor: '#FFFFFF',
-    inactiveTintColor: '#FFFFFF',
+    headerMode: 'none',
+
+    navigationOptions: ({navigation}) => {
+      let {routeName} = navigation.state.routes[navigation.state.index];
+      let navigationOptions = {};
+
+      if (routeName === 'Maps' || routeName === 'Chat') {
+        navigationOptions.tabBarVisible = false;
+      }
+
+      return navigationOptions;
+    },
+  },
+);
+
+const MoreStack = createStackNavigator(
+  {
+    More,
+    Profile,
+  },
+  {
+    initialRouteName: 'More',
+    headerMode: 'none',
+  },
+);
+
+const AuthStack = createStackNavigator(
+  {
+    Login,
+    Register,
+  },
+  {
+    initialRouteName: 'Login',
+    headerMode: 'none',
+  },
+);
+
+const NavigationStack = createBottomTabNavigator(
+  {
+    HomeTab: {
+      screen: HomeStack,
+      navigationOptions: {
+        tabBarLabel: 'Home',
+        tabBarIcon: ({tintColor}) => (
+          <Icon
+            type="MaterialCommunityIcons"
+            name="home"
+            style={{fontSize: 24, color: tintColor, marginTop: 5}}
+          />
+        ),
+      },
+    },
+    MabarHistoryTab: {
+      screen: MabarHistory,
+      navigationOptions: {
+        tabBarLabel: 'History',
+        tabBarIcon: ({tintColor}) => (
+          <Icon
+            type="MaterialCommunityIcons"
+            name="history"
+            style={{fontSize: 24, color: tintColor, marginTop: 5}}
+          />
+        ),
+      },
+    },
+    MoreTab: {
+      screen: More,
+      navigationOptions: {
+        tabBarLabel: 'More',
+        tabBarIcon: ({tintColor}) => (
+          <Icon
+            type="MaterialCommunityIcons"
+            name="menu"
+            style={{fontSize: 24, color: tintColor, marginTop: 5}}
+          />
+        ),
+      },
+    },
+  },
+  {
+    initialRouteName: 'HomeTab',
+
     tabBarOptions: {
-        style : {
-            backgroundColor: 'white'
-        },
-        tabStyle: {
-            width : width/3
-        },
-        labelStyle: {
-            textAlign: 'center',
-            fontSize: 10,
-            fontWeight: 'bold',
-        }
-    }
-})
+      showLabel: false,
+      activeTintColor: 'white',
+      inactiveTintColor: 'grey',
+      style: {
+        backgroundColor: '#373737',
+      },
+      tabStyle: {
+        width: width / 3,
+      },
+      labelStyle: {
+        textAlign: 'center',
+        fontSize: 10,
+      },
+    },
+  },
+);
 
-const Router = createSwitchNavigator({
-    NavigationStack, SplashScreen, AuthStack
-},{
+const Router = createSwitchNavigator(
+  {
+    NavigationStack,
+    SplashScreen,
+    AuthStack,
+  },
+  {
     initialRouteName: 'SplashScreen',
-    headerMode: 'none'
-})
+    headerMode: 'none',
+  },
+);
 
-export default createAppContainer(Router)
+export default createAppContainer(Router);

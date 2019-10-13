@@ -1,14 +1,50 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StyleSheet, Image} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-import firebase from 'firebase';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Image,
+  Alert,
+  PermissionsAndroid,
+} from 'react-native';
 
 const SplashScreen = props => {
   useEffect(() => {
-    setTimeout(() => {
-      props.navigation.navigate('Login');
-    }, 2000);
+    checkLocation();
   }, []);
+
+  checkLocation = async () => {
+    let hasLocationPermission = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    );
+
+    if (!hasLocationPermission) {
+      hasLocationPermission = await this.requestLocationPermission();
+    }
+
+    if (hasLocationPermission) {
+      setTimeout(() => {
+        props.navigation.navigate('NavigationStack');
+      }, 2000);
+    }
+  };
+
+  requestLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Location Permission',
+          message: `ChatWae needs permission to get your location.`,
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (err) {
+      console.warn(err);
+      return false;
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
