@@ -29,6 +29,7 @@ const HomeStack = createStackNavigator(
     BuyPremium,
     Maps,
     Chat,
+    Profile,
   },
   {
     initialRouteName: 'Home',
@@ -50,7 +51,6 @@ const HomeStack = createStackNavigator(
 const MoreStack = createStackNavigator(
   {
     More,
-    Profile,
   },
   {
     initialRouteName: 'More',
@@ -98,7 +98,7 @@ const NavigationStack = createBottomTabNavigator(
       },
     },
     MoreTab: {
-      screen: More,
+      screen: MoreStack,
       navigationOptions: {
         tabBarLabel: 'More',
         tabBarIcon: ({tintColor}) => (

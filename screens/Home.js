@@ -6,11 +6,15 @@ import {
   Dimensions,
   Image,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import {Row} from 'native-base';
 
 const {width, height} = Dimensions.get('window');
-const Home = () => {
+const Home = props => {
+  const goProfile = () => {
+    props.navigation.navigate('Profile');
+  };
   return (
     <Fragment>
       <View style={styles.container}>
@@ -26,8 +30,10 @@ const Home = () => {
               />
             </View>
             <View style={styles.profileBox}>
-              <Text style={styles.name}>Blok</Text>
-              <Text style={styles.match}>200 Match</Text>
+              <TouchableOpacity onPress={goProfile}>
+                <Text style={styles.name}>Blok</Text>
+                <Text style={styles.match}>200 Match</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.statusBox}>
               <View style={styles.premiumBox}>
