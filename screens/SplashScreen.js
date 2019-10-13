@@ -1,6 +1,4 @@
-
 import React, {useEffect, useState} from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,24 +7,10 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 
-
-
 const SplashScreen = props => {
-  
-  const [uid, setUid] = useState([null]);
   useEffect(() => {
-    checkLocation()
-    Check()
+    checkLocation();
   }, []);
-  
-  const Check = async () => {
-    await setUid(AsyncStorage.getItem('uid'));
-    if (uid !== null) {
-      props.navigation.navigate('Login');
-    } else {
-      props.navigation.navigate('Home');
-    }
-  };
 
   checkLocation = async () => {
     let hasLocationPermission = await PermissionsAndroid.check(
@@ -71,7 +55,6 @@ const SplashScreen = props => {
     </SafeAreaView>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
