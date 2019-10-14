@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   game: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: 13,
+    marginHorizontal: 13,
   },
   gameImgBox: {
     height: 100,
