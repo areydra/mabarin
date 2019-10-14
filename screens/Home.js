@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import firebase from 'firebase';
 
@@ -36,9 +37,10 @@ const Home = props => {
   useEffect(() => {
     getUser();
   }, []);
+
   const name = data.username;
 
-  console.log(data.photo);
+  console.log(data);
 
   return (
     <Fragment>
@@ -49,16 +51,19 @@ const Home = props => {
               <Image
                 style={styles.imgProfile}
                 source={{
-                  uri:
-                    'https://www.shareicon.net/data/2016/09/01/822711_user_512x512.png',
+                  uri: data.photo,
                 }}
               />
             </View>
             <View style={styles.profileBox}>
               <TouchableOpacity onPress={goProfile}>
-                <Text style={styles.name}>
-                  {name.length > 8 ? nem.substr(0, 8) + '...' : name}
-                </Text>
+                {data ? (
+                  <Text style={styles.name}>
+                    {name.length > 8 ? name.substr(0, 8) + '...' : name}
+                  </Text>
+                ) : (
+                  <ActivityIndicator color="white" />
+                )}
                 <Text style={styles.match}>200 Match</Text>
               </TouchableOpacity>
             </View>
