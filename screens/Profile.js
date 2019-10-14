@@ -1,21 +1,33 @@
 import React, {Fragment} from 'react';
-import {Text, StyleSheet, View, Image, Dimensions} from 'react-native';
-import {Header, Left, Right, Body} from 'native-base';
+import {
+  Text,
+  StyleSheet,
+  View,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
+import {Header, Left, Right, Body, Icon} from 'native-base';
 
 const {width, height} = Dimensions.get('window');
-const Profile = () => {
+
+const Profile = props => {
+  const goHome = () => {
+    props.navigation.navigate('Home');
+  };
+
   return (
     <Fragment>
       <Header androidStatusBarColor="gray" style={styles.header}>
         <Left>
-          <Text>Hello</Text>
+          <TouchableOpacity onPress={goHome}>
+            <Icon type="AntDesign" name="left" style={styles.icon} />
+          </TouchableOpacity>
         </Left>
         <Body>
-          <Text>Hello2</Text>
+          <Text style={styles.textHeader}>Profile</Text>
         </Body>
-        <Right>
-          <Text>Hello3</Text>
-        </Right>
+        <Right></Right>
       </Header>
       <View style={styles.container}>
         <View style={styles.userProfile}>
@@ -27,11 +39,12 @@ const Profile = () => {
                   'http://www.galamedianews.com/media/news/191011214614-orang.png',
               }}
             />
+            <Icon type="AntDesign" name="camerao" style={styles.iconCamera} />
           </View>
           <View style={styles.profileBox}>
             <View style={styles.nameBox}>
               <Text style={styles.name}>React</Text>
-              <Text style={styles.edit}>Go</Text>
+              <Icon type="FontAwesome5" name="edit" style={styles.edit} />
             </View>
             <Text style={styles.match}>0,61</Text>
           </View>
@@ -67,6 +80,13 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#373737',
   },
+  textHeader: {
+    color: 'white',
+    fontSize: 18,
+  },
+  icon: {
+    color: 'white',
+  },
   container: {
     flex: 1,
     backgroundColor: '#1C1C1C',
@@ -91,8 +111,12 @@ const styles = StyleSheet.create({
   img: {
     width: '100%',
     flex: 1,
-
     resizeMode: 'cover',
+  },
+  iconCamera: {
+    fontSize: 12,
+
+    color: 'white',
   },
   profileBox: {
     width: width / 3,
@@ -109,6 +133,8 @@ const styles = StyleSheet.create({
   },
   edit: {
     color: 'white',
+    fontSize: 12,
+    paddingTop: 5,
   },
   match: {
     fontSize: 12,
@@ -151,7 +177,7 @@ const styles = StyleSheet.create({
   },
   contenBox: {
     marginLeft: 13,
-    borderColor: 'white',
+    borderColor: '#9c9c9c',
     borderBottomWidth: 1,
     width: width / 1.5,
   },
