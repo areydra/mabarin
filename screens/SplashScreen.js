@@ -23,7 +23,7 @@ const SplashScreen = props => {
 
     if (hasLocationPermission) {
       setTimeout(() => {
-        props.navigation.navigate('NavigationStack');
+        props.navigation.navigate('AuthStack');
       }, 2000);
     }
   };

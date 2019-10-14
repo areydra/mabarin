@@ -31,7 +31,7 @@ const HomeStack = createStackNavigator(
     Chat,
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Maps',
     headerMode: 'none',
 
     navigationOptions: ({navigation}) => {
