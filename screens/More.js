@@ -17,10 +17,13 @@ const More = props => {
       .auth()
       .signOut()
       .then(() => {
+        firebase
+          .database()
+          .ref(`users/${user.uid}`)
+          .update({status: 'offline'});
         props.navigation.navigate('Login');
       })
       .catch(error => console.log(error));
-    console.log(user.uid);
   };
 
   return (

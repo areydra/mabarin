@@ -41,7 +41,7 @@ const Register = props => {
           firebase.auth().currentUser.updateProfile({
             displayName: username,
             photoURL:
-              'http://pluspng.com/img-png/user-png-icon-male-user-icon-512.png',
+              'https://www.shareicon.net/data/2016/09/01/822711_user_512x512.png',
           });
           firebase
             .database()
@@ -51,8 +51,9 @@ const Register = props => {
               username: username,
               email: email,
               photo:
-                'http://pluspng.com/img-png/user-png-icon-male-user-icon-512.png',
+                'https://www.shareicon.net/data/2016/09/01/822711_user_512x512.png',
               premium: false,
+              status: 'online',
             });
         });
       props.navigation.navigate('Home');

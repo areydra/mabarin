@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -12,10 +12,33 @@ import firebase from 'firebase';
 
 const {width, height} = Dimensions.get('window');
 const Home = props => {
+  const [data, setData] = useState('');
+
   const goProfile = () => {
     props.navigation.navigate('Profile');
   };
-  const nem = 'Tes';
+
+  const getUser = async () => {
+    const user = firebase.auth().currentUser;
+    await firebase
+      .database()
+      .ref(`users/${user.uid}`)
+      .once('value')
+      .then(result => {
+        let data = result.val();
+
+        if (data !== null) {
+          setData(data);
+        }
+      });
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+  const name = data.username;
+
+  console.log(data.photo);
 
   return (
     <Fragment>
@@ -27,22 +50,24 @@ const Home = props => {
                 style={styles.imgProfile}
                 source={{
                   uri:
-                    'http://www.galamedianews.com/media/news/191011214614-orang.png',
+                    'https://www.shareicon.net/data/2016/09/01/822711_user_512x512.png',
                 }}
               />
             </View>
             <View style={styles.profileBox}>
               <TouchableOpacity onPress={goProfile}>
                 <Text style={styles.name}>
-                  {nem.length > 8 ? nem.substr(0, 8) + '...' : nem}
+                  {name.length > 8 ? nem.substr(0, 8) + '...' : name}
                 </Text>
                 <Text style={styles.match}>200 Match</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.statusBox}>
-              <View style={styles.premiumBox}>
-                <Text style={styles.premium}>Premium</Text>
-              </View>
+              {data.premium ? (
+                <View style={styles.premiumBox}>
+                  <Text style={styles.premium}>Premium</Text>
+                </View>
+              ) : null}
             </View>
           </View>
           <Text style={styles.eventText}>Cooming Soon Event</Text>
@@ -70,78 +95,78 @@ const Home = props => {
           </View>
           <Text style={styles.textMabar}>Mabar Now!</Text>
 
-          <View style={styles.game}>
-            <View style={styles.gameImgBox}>
-              <Image
-                style={styles.gameImg}
-                source={{
-                  uri:
-                    'https://images7.alphacoders.com/719/thumb-1920-719179.png',
-                }}
-              />
-            </View>
-            <View style={styles.gameImgBox}>
-              <Image
-                style={styles.gameImg}
-                source={{
-                  uri:
-                    'https://images7.alphacoders.com/719/thumb-1920-719179.png',
-                }}
-              />
-            </View>
-            <View style={styles.gameImgBox}>
-              <Image
-                style={styles.gameImg}
-                source={{
-                  uri:
-                    'https://images7.alphacoders.com/719/thumb-1920-719179.png',
-                }}
-              />
-            </View>
-            <View style={styles.gameImgBox}>
-              <Image
-                style={styles.gameImg}
-                source={{
-                  uri:
-                    'https://images7.alphacoders.com/719/thumb-1920-719179.png',
-                }}
-              />
-            </View>
-            <View style={styles.gameImgBox}>
-              <Image
-                style={styles.gameImg}
-                source={{
-                  uri:
-                    'https://images7.alphacoders.com/719/thumb-1920-719179.png',
-                }}
-              />
-            </View>
-            <View style={styles.gameImgBox}>
-              <Image
-                style={styles.gameImg}
-                source={{
-                  uri:
-                    'https://images7.alphacoders.com/719/thumb-1920-719179.png',
-                }}
-              />
-            </View>
-            <View style={styles.gameImgBox}>
-              <Image
-                style={styles.gameImg}
-                source={{
-                  uri:
-                    'https://images7.alphacoders.com/719/thumb-1920-719179.png',
-                }}
-              />
-            </View>
-            <View style={styles.gameImgBox}>
-              <Image
-                style={styles.gameImg}
-                source={{
-                  uri:
-                    'https://images7.alphacoders.com/719/thumb-1920-719179.png',
-                }}
-              />
+          <View
+            style={{
+              alignItems: 'center',
+              flex: 1,
+            }}>
+            <View style={styles.game}>
+              <TouchableOpacity>
+                <View style={styles.gameImgBox}>
+                  <Image
+                    style={styles.gameImg}
+                    source={{
+                      uri:
+                        'https://www.filemagz.com/wp-content/uploads/2017/12/FILEmagz_MobileLegend-900x445.jpg',
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <View style={styles.gameImgBox}>
+                  <Image
+                    style={styles.gameImg}
+                    source={{
+                      uri:
+                        'https://upload.wikimedia.org/wikipedia/en/0/07/CODM_logo.png',
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <View style={styles.gameImgBox}>
+                  <Image
+                    style={styles.gameImg}
+                    source={{
+                      uri:
+                        'https://aov.garena.co.id/mobile/static/AOV_Header_Logo.27fcd7cc.png',
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <View style={styles.gameImgBox}>
+                  <Image
+                    style={styles.gameImg}
+                    source={{
+                      uri:
+                        'https://i.pinimg.com/originals/f7/43/c4/f743c45a69f00a4d6254ce42f3803dd1.jpg',
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <View style={styles.gameImgBox}>
+                  <Image
+                    style={styles.gameImg}
+                    source={{
+                      uri:
+                        'https://i.pinimg.com/originals/2a/c7/f6/2ac7f632db01559453202539d365eb91.jpg',
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <View style={styles.gameImgBox}>
+                  <Image
+                    style={styles.gameImg}
+                    source={{
+                      uri:
+                        'https://thepopinsider.com/wp-content/uploads/2019/06/TETRIS_LOGO_2019.jpg',
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
@@ -188,12 +213,13 @@ const styles = StyleSheet.create({
   },
   match: {
     color: 'gray',
-    fontSize: 10,
+    fontSize: 13,
   },
   statusBox: {
     width: width / 2,
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
   },
   premiumBox: {
     borderColor: '#DDC535',
@@ -208,7 +234,7 @@ const styles = StyleSheet.create({
   },
   eventBox: {
     marginVertical: 5,
-    marginHorizontal: 15,
+    marginHorizontal: 10,
     height: height / 4,
     width: width / 1.2,
     borderRadius: 10,
@@ -229,18 +255,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
     padding: 12,
+    marginVertical: 8,
   },
   game: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginHorizontal: 13,
+    width: 360,
+    marginRight: width / -20,
+    // marginHorizontal: 13,
   },
   gameImgBox: {
     height: 100,
-    width: 110,
-    borderRadius: 17,
-    marginRight: 9,
-    marginBottom: 13,
+    width: 100,
+    borderRadius: 5,
+    marginRight: 18,
+    marginBottom: 18,
     overflow: 'hidden',
   },
   gameImg: {
