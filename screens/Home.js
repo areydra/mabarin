@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import {
   Text,
   View,
@@ -8,13 +8,15 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {Row} from 'native-base';
+import firebase from 'firebase';
 
 const {width, height} = Dimensions.get('window');
 const Home = props => {
   const goProfile = () => {
     props.navigation.navigate('Profile');
   };
+  const nem = 'Tes';
+
   return (
     <Fragment>
       <View style={styles.container}>
@@ -31,7 +33,9 @@ const Home = props => {
             </View>
             <View style={styles.profileBox}>
               <TouchableOpacity onPress={goProfile}>
-                <Text style={styles.name}>Blok</Text>
+                <Text style={styles.name}>
+                  {nem.length > 8 ? nem.substr(0, 8) + '...' : nem}
+                </Text>
                 <Text style={styles.match}>200 Match</Text>
               </TouchableOpacity>
             </View>
@@ -229,13 +233,13 @@ const styles = StyleSheet.create({
   game: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: 13,
+    marginHorizontal: 13,
   },
   gameImgBox: {
     height: 100,
     width: 110,
     borderRadius: 17,
-    marginRight: 18,
+    marginRight: 9,
     marginBottom: 13,
     overflow: 'hidden',
   },

@@ -40,6 +40,8 @@ const Register = props => {
 
           firebase.auth().currentUser.updateProfile({
             displayName: username,
+            photoURL:
+              'http://pluspng.com/img-png/user-png-icon-male-user-icon-512.png',
           });
           firebase
             .database()
