@@ -29,11 +29,15 @@ const Login = props => {
     await firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => {
+      .then(result => {
+        firebase
+          .database()
+          .ref(`users/${result.user.uid}`)
+          .update({status: 'online'});
         setEmail('');
         setPassword('');
         setLoading(false);
-        props.navigation.navigate('Maps');
+        props.navigation.navigate('Home');
         ToastAndroid.show(
           'Login Success',
           ToastAndroid.LONG,
@@ -49,7 +53,6 @@ const Login = props => {
         setLoading(false);
       });
   };
-  console.log(loading);
 
   return (
     <Fragment>
