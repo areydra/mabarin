@@ -1,8 +1,18 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, Text, Image, View, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import firebase from 'firebase'
 
-const More = () => {
+const More = props => {
+
+    const handleSignOut = () => {
+        firebase.auth().signOut().then(() => {
+            props.navigation.navigate('AuthStack')
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
     return (
         <SafeAreaView style={styles.moreContainer}>
             <View style={styles.header}>
