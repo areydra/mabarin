@@ -11,7 +11,7 @@ import firebase from 'firebase';
 const SplashScreen = props => {
   const checkUser = async () => {
     firebase.auth().onAuthStateChanged(user => {
-      props.navigation.navigate(user ? 'Maps' : 'Login');
+      props.navigation.navigate(user ? 'Home' : 'Login');
     });
   };
 
