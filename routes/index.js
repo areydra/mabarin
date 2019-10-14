@@ -32,7 +32,7 @@ const HomeStack = createStackNavigator(
     Profile,
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Maps',
     headerMode: 'none',
 
     navigationOptions: ({navigation}) => {

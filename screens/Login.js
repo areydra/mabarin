@@ -33,7 +33,7 @@ const Login = props => {
         setEmail('');
         setPassword('');
         setLoading(false);
-        props.navigation.navigate('Home');
+        props.navigation.navigate('Maps');
         ToastAndroid.show(
           'Login Success',
           ToastAndroid.LONG,

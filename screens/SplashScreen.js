@@ -30,8 +30,10 @@ const SplashScreen = props => {
 
     if (hasLocationPermission) {
       setTimeout(() => {
+
         checkUser();
       }, 1000);
+
     }
   };
 
