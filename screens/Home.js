@@ -54,35 +54,49 @@ const Home = props => {
     <Fragment>
       <View style={styles.container}>
         <ScrollView>
-          <View style={styles.header}>
-            <View style={styles.boxImg}>
-              <Image
-                style={styles.imgProfile}
-                source={{
-                  uri: data.photo,
-                }}
-              />
-            </View>
-            <View style={styles.profileBox}>
-              <TouchableOpacity onPress={goProfile}>
-                {data ? (
-                  <Text style={styles.name}>
-                    {name.length > 8 ? name.substr(0, 8) + '...' : name}
-                  </Text>
-                ) : (
-                  <ActivityIndicator color="white" />
-                )}
-                <Text style={styles.match}>200 Match</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.statusBox}>
-              {data.premium ? (
-                <View style={styles.premiumBox}>
-                  <Text style={styles.premium}>Premium</Text>
+          <TouchableOpacity onPress={goProfile} activeOpacity={0.8}>
+            <View style={styles.header}>
+              {data ? (
+                <>
+                  <View style={styles.boxImg}>
+                    <Image
+                      style={styles.imgProfile}
+                      source={{
+                        uri: data.photo,
+                      }}
+                    />
+                  </View>
+                  <View style={styles.profileBox}>
+                    <Text style={styles.name}>
+                      {name.length > 8 ? name.substr(0, 8) + '...' : name}
+                    </Text>
+
+                    <Text style={styles.match}>200 Match</Text>
+                  </View>
+                  <View style={styles.statusBox}>
+                    {data.premium ? (
+                      <View style={styles.premiumBox}>
+                        <Text style={styles.premium}>Premium</Text>
+                      </View>
+                    ) : (
+                      <View style={styles.premiumBoxOf}>
+                        <Text style={styles.premiumOf}>Basic</Text>
+                      </View>
+                    )}
+                  </View>
+                </>
+              ) : (
+                <View style={styles.loadingBox}>
+                  <ActivityIndicator
+                    color="#006aeb"
+                    size="large"
+                    style={styles.loading}
+                  />
                 </View>
-              ) : null}
+              )}
             </View>
-          </View>
+
+          </TouchableOpacity>
           <Text style={styles.eventText}>Coming Soon Event</Text>
           <View>
             <ScrollView horizontal={true}>
@@ -91,7 +105,7 @@ const Home = props => {
                   style={styles.eventImg}
                   source={{
                     uri:
-                      'https://images5.alphacoders.com/700/thumb-1920-700733.png',
+                      'https://gamebrott.com/wp-content/uploads/2016/03/esport-gb-57-768x480.jpg',
                   }}
                 />
               </View>
@@ -100,7 +114,7 @@ const Home = props => {
                   style={styles.eventImg}
                   source={{
                     uri:
-                      'https://images5.alphacoders.com/700/thumb-1920-700733.png',
+                      'https://cdn2.tstatic.net/tribunnews/foto/bank/images/esport_20180922_214430.jpg',
                   }}
                 />
               </View>
@@ -247,6 +261,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1C1C1C',
   },
+  loadingBox: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  loading: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   header: {
     height: height / 6,
     flexDirection: 'row',
@@ -277,6 +300,10 @@ const styles = StyleSheet.create({
   name: {
     color: 'white',
     fontSize: 18,
+    fontWeight: '700',
+    textShadowColor: 'black',
+    textShadowOffset: {width: 5, height: 3},
+    textShadowRadius: 5,
   },
   match: {
     color: 'gray',
@@ -296,6 +323,17 @@ const styles = StyleSheet.create({
   premium: {
     fontSize: 15,
     color: '#DDC535',
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+  },
+  premiumBoxOf: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 6,
+  },
+  premiumOf: {
+    fontSize: 15,
+    color: 'gray',
     paddingVertical: 5,
     paddingHorizontal: 15,
   },
@@ -329,7 +367,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: 360,
     marginRight: width / -20,
-    // marginHorizontal: 13,
   },
   gameImgBox: {
     height: 100,
@@ -340,8 +377,10 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   gameImg: {
+
     width: '100%',
     flex: 1,
+
     resizeMode: 'cover',
   },
 });

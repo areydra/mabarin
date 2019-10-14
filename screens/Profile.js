@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import {
   Text,
   StyleSheet,
@@ -6,12 +6,38 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  ActivityIndicator,
+  PermissionsAndroid,
 } from 'react-native';
 import {Header, Left, Right, Body, Icon} from 'native-base';
+import firebase from 'firebase';
 
 const {width, height} = Dimensions.get('window');
 
 const Profile = props => {
+  const [data, setData] = useState('');
+  const [img, setImg] = useState('');
+
+  const getUser = () => {
+    const user = firebase.auth().currentUser;
+    firebase
+      .database()
+      .ref(`users/${user.uid}`)
+      .once('value')
+      .then(result => {
+        let datas = result.val();
+        if (datas !== null) {
+          setData(datas);
+          setImg(datas.photo);
+        }
+      });
+  };
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const name = data.username;
+
   const goHome = () => {
     props.navigation.navigate('Home');
   };
@@ -31,28 +57,45 @@ const Profile = props => {
       </Header>
       <View style={styles.container}>
         <View style={styles.userProfile}>
-          <View style={styles.imgBox}>
-            <Image
-              style={styles.img}
-              source={{
-                uri:
-                  'http://www.galamedianews.com/media/news/191011214614-orang.png',
-              }}
-            />
-            <Icon type="AntDesign" name="camerao" style={styles.iconCamera} />
-          </View>
-          <View style={styles.profileBox}>
-            <View style={styles.nameBox}>
-              <Text style={styles.name}>React</Text>
-              <Icon type="FontAwesome5" name="edit" style={styles.edit} />
+          {data ? (
+            <>
+              <View style={styles.imgBox}>
+                <Image
+                  style={styles.img}
+                  source={{
+                    uri: img,
+                  }}
+                />
+              </View>
+
+              <View style={styles.profileBox}>
+                <Text style={styles.name}>
+                  {name.length > 8 ? name.substr(0, 8) + '...' : name}
+                </Text>
+
+                <Text style={styles.match}>0,61</Text>
+              </View>
+              <View style={styles.statusBox}>
+                {data.premium ? (
+                  <View style={styles.premiumBox}>
+                    <Text style={styles.premium}>Premium</Text>
+                  </View>
+                ) : (
+                  <View style={styles.premiumBoxOf}>
+                    <Text style={styles.premiumOf}>Basic</Text>
+                  </View>
+                )}
+              </View>
+            </>
+          ) : (
+            <View style={styles.loadingBox}>
+              <ActivityIndicator
+                color="#006aeb"
+                size="large"
+                style={styles.loading}
+              />
             </View>
-            <Text style={styles.match}>0,61</Text>
-          </View>
-          <View style={styles.statusBox}>
-            <View style={styles.premiumBox}>
-              <Text style={styles.premium}>Premium</Text>
-            </View>
-          </View>
+          )}
         </View>
         <Text style={styles.open}>Mabar History</Text>
         <View style={styles.historBox}>
@@ -84,6 +127,15 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
   },
+  loadingBox: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  loading: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   icon: {
     color: 'white',
   },
@@ -107,29 +159,25 @@ const styles = StyleSheet.create({
     borderRadius: 160,
     marginRight: 20,
     overflow: 'hidden',
+    backgroundColor: 'rgba(0,0,0,0.2)',
   },
   img: {
     width: '100%',
     flex: 1,
     resizeMode: 'cover',
   },
-  iconCamera: {
-    fontSize: 12,
 
-    color: 'white',
-  },
   profileBox: {
     width: width / 4,
     alignItems: 'flex-start',
     justifyContent: 'center',
   },
-  nameBox: {
-    flexDirection: 'row',
-  },
+
   name: {
     fontSize: 18,
     color: 'white',
     marginRight: 10,
+    fontWeight: '700',
   },
   edit: {
     color: 'white',
@@ -138,7 +186,7 @@ const styles = StyleSheet.create({
   },
   match: {
     fontSize: 12,
-    color: 'white',
+    color: 'gray',
   },
   statusBox: {
     width: width / 2,
@@ -153,6 +201,17 @@ const styles = StyleSheet.create({
   premium: {
     fontSize: 15,
     color: '#DDC535',
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+  },
+  premiumBoxOf: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 6,
+  },
+  premiumOf: {
+    fontSize: 15,
+    color: 'gray',
     paddingVertical: 5,
     paddingHorizontal: 15,
   },
@@ -187,12 +246,12 @@ const styles = StyleSheet.create({
   },
   playWith: {
     fontSize: 12,
-    color: 'white',
+    color: '#b5b5b5',
     paddingTop: 5,
   },
   status: {
     fontSize: 12,
-    color: 'white',
+    color: '#b5b5b5',
   },
 });
 

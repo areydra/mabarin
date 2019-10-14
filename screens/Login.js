@@ -29,7 +29,11 @@ const Login = props => {
     await firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => {
+      .then(result => {
+        firebase
+          .database()
+          .ref(`users/${result.user.uid}`)
+          .update({status: 'online'});
         setEmail('');
         setPassword('');
         setLoading(false);
