@@ -102,7 +102,9 @@ class Maps extends Component {
               <Marker
                 key={index}
                 onCalloutPress={() =>
-                  this.props.navigation.navigate('Chat', item)
+                  item.id == userId
+                    ? null
+                    : this.props.navigation.navigate('Chat', item)
                 }
                 title={item.id == userId ? 'You' : item.username}
                 coordinate={{
@@ -112,8 +114,8 @@ class Maps extends Component {
                 {item.id == userId ? (
                   <View
                     style={{
-                      width: 70,
-                      height: 70,
+                      width: 80,
+                      height: 80,
                     }}>
                     <Image
                       source={Mark}
@@ -126,7 +128,7 @@ class Maps extends Component {
                   </View>
                 ) : (
                   <View style={styles.avatar}>
-                    {/* <Image source={{uri: item.photo}} style={styles.image} /> */}
+                    <Image source={{uri: item.photo}} style={styles.image} />
                   </View>
                 )}
               </Marker>
@@ -139,6 +141,11 @@ class Maps extends Component {
 }
 
 const styles = StyleSheet.create({
+  image: {
+    resizeMode: 'cover',
+    flex: 1,
+    width: '100%',
+  },
   avatar: {
     zIndex: 1,
     width: 40,

@@ -11,7 +11,7 @@ import firebase from 'firebase';
 const SplashScreen = props => {
   const checkUser = async () => {
     firebase.auth().onAuthStateChanged(user => {
-      props.navigation.navigate(user ? 'Home' : 'Login');
+      props.navigation.navigate(user ? 'Maps' : 'Login');
     });
   };
 
@@ -30,10 +30,8 @@ const SplashScreen = props => {
 
     if (hasLocationPermission) {
       setTimeout(() => {
-
         checkUser();
       }, 1000);
-
     }
   };
 
