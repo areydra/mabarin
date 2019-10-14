@@ -14,7 +14,7 @@ import firebase from 'firebase';
 const {width, height} = Dimensions.get('window');
 const Home = props => {
   const [data, setData] = useState('');
-
+  const user = firebase.auth().currentUser;
   const goProfile = () => {
     props.navigation.navigate('Profile');
   };
@@ -34,13 +34,21 @@ const Home = props => {
       });
   };
 
+  const setMatching = () => {
+    props.navigation.addListener('didFocus', () => {
+      firebase
+        .database()
+        .ref('users/' + user.uid)
+        .update({matching: null});
+    });
+  };
+
   useEffect(() => {
     getUser();
+    setMatching();
   }, []);
 
   const name = data.username;
-
-  console.log(data);
 
   return (
     <Fragment>
@@ -75,7 +83,7 @@ const Home = props => {
               ) : null}
             </View>
           </View>
-          <Text style={styles.eventText}>Cooming Soon Event</Text>
+          <Text style={styles.eventText}>Coming Soon Event</Text>
           <View>
             <ScrollView horizontal={true}>
               <View style={styles.eventBox}>
@@ -106,7 +114,16 @@ const Home = props => {
               flex: 1,
             }}>
             <View style={styles.game}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  firebase
+                    .database()
+                    .ref('users/' + user.uid)
+                    .update({matching: 'ML'})
+                    .then(() => {
+                      props.navigation.navigate('Maps', {match: 'ML'});
+                    })
+                }>
                 <View style={styles.gameImgBox}>
                   <Image
                     style={styles.gameImg}
@@ -117,7 +134,16 @@ const Home = props => {
                   />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  firebase
+                    .database()
+                    .ref('users/' + user.uid)
+                    .update({matching: 'COD'})
+                    .then(() => {
+                      props.navigation.navigate('Maps', {match: 'COD'});
+                    })
+                }>
                 <View style={styles.gameImgBox}>
                   <Image
                     style={styles.gameImg}
@@ -128,7 +154,16 @@ const Home = props => {
                   />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  firebase
+                    .database()
+                    .ref('users/' + user.uid)
+                    .update({matching: 'AOV'})
+                    .then(() => {
+                      props.navigation.navigate('Maps', {match: 'AOV'});
+                    })
+                }>
                 <View style={styles.gameImgBox}>
                   <Image
                     style={styles.gameImg}
@@ -139,7 +174,16 @@ const Home = props => {
                   />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  firebase
+                    .database()
+                    .ref('users/' + user.uid)
+                    .update({matching: 'PUBG'})
+                    .then(() => {
+                      props.navigation.navigate('Maps', {match: 'PUBG'});
+                    })
+                }>
                 <View style={styles.gameImgBox}>
                   <Image
                     style={styles.gameImg}
@@ -150,7 +194,16 @@ const Home = props => {
                   />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  firebase
+                    .database()
+                    .ref('users/' + user.uid)
+                    .update({matching: 'VG'})
+                    .then(() => {
+                      props.navigation.navigate('Maps', {match: 'VG'});
+                    })
+                }>
                 <View style={styles.gameImgBox}>
                   <Image
                     style={styles.gameImg}
@@ -161,7 +214,16 @@ const Home = props => {
                   />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  firebase
+                    .database()
+                    .ref('users/' + user.uid)
+                    .update({matching: 'TE'})
+                    .then(() => {
+                      props.navigation.navigate('Maps', {match: 'TE'});
+                    })
+                }>
                 <View style={styles.gameImgBox}>
                   <Image
                     style={styles.gameImg}
@@ -278,7 +340,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   gameImg: {
-    height: '100%',
+    width: '100%',
+    flex: 1,
+    resizeMode: 'cover',
   },
 });
 

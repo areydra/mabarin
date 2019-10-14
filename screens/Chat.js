@@ -122,8 +122,7 @@ class Chat extends Component {
         )}
         {/* Overlay Notif END */}
         <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Maps')}>
+          <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Icon
               type="AntDesign"
               name="left"
@@ -139,7 +138,7 @@ class Chat extends Component {
               <Text style={{color: 'white', fontSize: 18, fontWeight: '700'}}>
                 {friendData.username}
               </Text>
-              <Text style={{color: 'white'}}>Online</Text>
+              <Text style={{color: 'white'}}>{friendData.status}</Text>
             </View>
           </View>
           <View style={styles.but}>
