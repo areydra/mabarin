@@ -54,6 +54,10 @@ const Register = props => {
                 'https://www.shareicon.net/data/2016/09/01/822711_user_512x512.png',
               premium: false,
               status: 'online',
+              Location: {
+                latitude: 0,
+                longitude: 0,
+              },
             });
         });
       props.navigation.navigate('Home');

@@ -13,6 +13,8 @@ import geolocation from '@react-native-community/geolocation';
 import MapView, {Marker} from 'react-native-maps';
 import firebase from 'firebase';
 
+import {withNavigation} from 'react-navigation';
+
 const {width} = Dimensions.get('window');
 import Mark from '../assets/image/MabarinMarker.png';
 
@@ -24,12 +26,14 @@ class Maps extends Component {
       longitude: 0,
       latitude: 0,
       users: [],
+      userId: '',
     };
   }
 
   componentDidMount = async () => {
     await this.usersLocation();
-    let user = await firebase.auth().currentUser;
+    const user = firebase.auth().currentUser;
+
     await this.setState({userId: user.uid});
 
     await geolocation.getCurrentPosition(position => {
@@ -75,11 +79,13 @@ class Maps extends Component {
 
   render() {
     const {userId} = this.state;
+    const matchUser = this.state.users.filter(
+      user => user.matching === this.props.navigation.getParam('match'),
+    );
     return (
       <Fragment>
         <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Home')}>
+          <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Icon
               type="AntDesign"
               name="left"
@@ -98,7 +104,7 @@ class Maps extends Component {
             minZoomLevel={0}
             maxZoomLevel={20}
             style={styles.map}>
-            {this.state.users.map((item, index) => (
+            {matchUser.map((item, index) => (
               <Marker
                 key={index}
                 onCalloutPress={() =>
@@ -184,4 +190,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Maps;
+export default withNavigation(Maps);
