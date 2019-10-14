@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   profileBox: {
-    width: width / 3,
+    width: width / 4,
     alignItems: 'flex-start',
     justifyContent: 'center',
   },
