@@ -120,6 +120,7 @@ const NavigationStack = createBottomTabNavigator(
       inactiveTintColor: 'grey',
       style: {
         backgroundColor: '#373737',
+        borderTopWidth: 0,
       },
       tabStyle: {
         width: width / 3,

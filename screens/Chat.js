@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   Dimensions,
   View,
-  Button,
+  Image,
 } from 'react-native';
 import {GiftedChat, Bubble, InputToolbar, Send} from 'react-native-gifted-chat';
 import {Icon} from 'native-base';
@@ -18,9 +18,12 @@ class Chat extends Component {
     this.state = {
       messages: [],
       invited: false,
+      friendData: {},
     };
   }
-  componentDidMount = () => {
+  componentDidMount = async () => {
+    await this.setState({friendData: this.props.navigation.state.params});
+
     this.setState({
       messages: [
         {
@@ -83,6 +86,7 @@ class Chat extends Component {
   }
 
   render() {
+    const {friendData} = this.state;
     return (
       <Fragment>
         {/* Overlay Notif */
@@ -128,10 +132,12 @@ class Chat extends Component {
           </TouchableOpacity>
 
           <View style={styles.headSub}>
-            <View style={styles.img}></View>
+            <View style={styles.img}>
+              <Image source={{uri: friendData.photo}} style={styles.image} />
+            </View>
             <View style={styles.sub}>
               <Text style={{color: 'white', fontSize: 18, fontWeight: '700'}}>
-                Name
+                {friendData.username}
               </Text>
               <Text style={{color: 'white'}}>Online</Text>
             </View>
@@ -165,6 +171,11 @@ class Chat extends Component {
 }
 
 const styles = StyleSheet.create({
+  image: {
+    resizeMode: 'cover',
+    flex: 1,
+    width: '100%',
+  },
   butAccept: {
     backgroundColor: 'green',
     borderRadius: 5,
