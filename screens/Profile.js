@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: 'white',
+    fontSize: 14,
   },
   container: {
     flex: 1,
