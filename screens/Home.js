@@ -11,6 +11,14 @@ import {
 } from 'react-native';
 import firebase from 'firebase';
 
+import ML from '../assets/image/ML.jpg';
+import AOV from '../assets/image/AOV.jpg';
+import PUBG from '../assets/image/PUBG.jpg';
+import VG from '../assets/image/VG.jpg';
+import TE from '../assets/image/TE.jpg';
+import eventOne from '../assets/image/eventOne.jpg';
+import eventTwo from '../assets/image/eventTwo.jpg';
+
 const {width, height} = Dimensions.get('window');
 const Home = props => {
   const [data, setData] = useState('');
@@ -98,28 +106,21 @@ const Home = props => {
           </TouchableOpacity>
           <Text style={styles.eventText}>Coming Soon Event</Text>
           <View>
-            <ScrollView horizontal={true}>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
               <View style={styles.eventBox}>
-                <Image
-                  style={styles.eventImg}
-                  source={{
-                    uri:
-                      'https://gamebrott.com/wp-content/uploads/2016/03/esport-gb-57-768x480.jpg',
-                  }}
-                />
+                <Image style={styles.eventImg} source={eventOne} />
               </View>
               <View style={styles.eventBox}>
-                <Image
-                  style={styles.eventImg}
-                  source={{
-                    uri:
-                      'https://cdn2.tstatic.net/tribunnews/foto/bank/images/esport_20180922_214430.jpg',
-                  }}
-                />
+                <Image style={styles.eventImg} source={eventTwo} />
               </View>
             </ScrollView>
           </View>
-          <Text style={styles.textMabar}>Mabar Now!</Text>
+          <Text style={styles.textMabar}>
+            Mabar Now!
+            <Text style={styles.subTit}>&nbsp;&nbsp;Find Your Crew</Text>
+          </Text>
 
           <View
             style={{
@@ -141,13 +142,7 @@ const Home = props => {
                     })
                 }>
                 <View style={styles.gameImgBox}>
-                  <Image
-                    style={styles.gameImg}
-                    source={{
-                      uri:
-                        'https://www.filemagz.com/wp-content/uploads/2017/12/FILEmagz_MobileLegend-900x445.jpg',
-                    }}
-                  />
+                  <Image style={styles.gameImg} source={ML} />
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -187,13 +182,7 @@ const Home = props => {
                     })
                 }>
                 <View style={styles.gameImgBox}>
-                  <Image
-                    style={styles.gameImg}
-                    source={{
-                      uri:
-                        'https://aov.garena.co.id/mobile/static/AOV_Header_Logo.27fcd7cc.png',
-                    }}
-                  />
+                  <Image style={styles.gameImg} source={AOV} />
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -210,13 +199,7 @@ const Home = props => {
                     })
                 }>
                 <View style={styles.gameImgBox}>
-                  <Image
-                    style={styles.gameImg}
-                    source={{
-                      uri:
-                        'https://i.pinimg.com/originals/f7/43/c4/f743c45a69f00a4d6254ce42f3803dd1.jpg',
-                    }}
-                  />
+                  <Image style={styles.gameImg} source={PUBG} />
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -233,13 +216,7 @@ const Home = props => {
                     })
                 }>
                 <View style={styles.gameImgBox}>
-                  <Image
-                    style={styles.gameImg}
-                    source={{
-                      uri:
-                        'https://i.pinimg.com/originals/2a/c7/f6/2ac7f632db01559453202539d365eb91.jpg',
-                    }}
-                  />
+                  <Image style={styles.gameImg} source={VG} />
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -256,13 +233,7 @@ const Home = props => {
                     })
                 }>
                 <View style={styles.gameImgBox}>
-                  <Image
-                    style={styles.gameImg}
-                    source={{
-                      uri:
-                        'https://thepopinsider.com/wp-content/uploads/2019/06/TETRIS_LOGO_2019.jpg',
-                    }}
-                  />
+                  <Image style={styles.gameImg} source={TE} />
                 </View>
               </TouchableOpacity>
             </View>
@@ -274,6 +245,10 @@ const Home = props => {
 };
 
 const styles = StyleSheet.create({
+  subTit: {
+    fontSize: 14,
+    color: 'grey',
+  },
   container: {
     flex: 1,
     backgroundColor: '#1C1C1C',
@@ -356,17 +331,19 @@ const styles = StyleSheet.create({
   },
   eventBox: {
     marginVertical: 5,
-    marginHorizontal: 10,
+    marginHorizontal: 8,
     height: height / 4,
     width: width / 1.2,
-    borderRadius: 10,
+    borderRadius: 5,
     overflow: 'hidden',
   },
   eventText: {
     color: 'white',
     fontSize: 18,
-    marginVertical: 10,
+    marginTop: 20,
+    marginBottom: 10,
     paddingLeft: 13,
+    fontWeight: '700',
   },
   eventImg: {
     width: '100%',
@@ -378,6 +355,7 @@ const styles = StyleSheet.create({
     color: 'white',
     padding: 12,
     marginVertical: 8,
+    fontWeight: '700',
   },
   game: {
     flexDirection: 'row',

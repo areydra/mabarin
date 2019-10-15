@@ -29,15 +29,15 @@ const More = props => {
   return (
     <SafeAreaView style={styles.moreContainer}>
       <View style={styles.header}>
-        <Image
+        {/* <Image
           source={require('../assets/icons/left-arrow.png')}
           style={styles.icon}
-        />
+        /> */}
         <Text style={styles.headerTitle}>More</Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.5}>
+          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.8}>
             <View style={styles.menu}>
               <Text style={styles.menuText}>Profile</Text>
               <Image
@@ -46,7 +46,7 @@ const More = props => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.5}>
+          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.8}>
             <View style={styles.menu}>
               <Text style={styles.menuText}>Settings</Text>
               <Image
@@ -55,7 +55,7 @@ const More = props => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.5}>
+          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.8}>
             <View style={styles.menu}>
               <Text style={styles.menuText}>Contact Us</Text>
               <Image
@@ -64,7 +64,7 @@ const More = props => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.5}>
+          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.8}>
             <View style={styles.menu}>
               <Text style={styles.menuText}>About Mabarin</Text>
               <Image
@@ -73,7 +73,7 @@ const More = props => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.5}>
+          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.8}>
             <View style={styles.menu}>
               <Text style={styles.menuText}>Others</Text>
               <Image
@@ -82,8 +82,8 @@ const More = props => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={logOut} activeOpacity={0.5}>
-            <View style={styles.menu}>
+          <TouchableOpacity onPress={logOut} activeOpacity={0.8}>
+            <View style={[styles.menu, {backgroundColor: 'whitesmoke'}]}>
               <Text style={styles.menuTextLogout}>Logout</Text>
             </View>
           </TouchableOpacity>
@@ -99,10 +99,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   header: {
-    height: 50,
+    height: 60,
     backgroundColor: '#373737',
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 20,
   },
   icon: {
     width: 20,
@@ -119,22 +120,22 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 55,
     flexDirection: 'row',
-    borderBottomColor: 'grey',
+    borderBottomColor: 'whitesmoke',
     borderBottomWidth: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 15,
   },
   menuText: {
-    fontSize: 20,
-    color: '#474747',
+    fontSize: 18,
+    color: 'grey',
   },
   menuIcon: {
-    width: 20,
-    height: 20,
+    width: 14,
+    height: 14,
   },
   menuTextLogout: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#DC0808',
   },
