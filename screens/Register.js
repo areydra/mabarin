@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import firebase from 'firebase';
+import {validate} from '@babel/types';
 
 const {width, height} = Dimensions.get('window');
 
@@ -22,14 +23,24 @@ const Register = props => {
   const [rePassword, setRePassword] = useState('');
 
   const onRegister = async () => {
+    const validEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/gim;
+    const validPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,25}$/gim;
+    let checkEmail = email.match(validEmail);
+    let checkPassword = password.match(validPass);
+    console.log('validasi', checkEmail, checkPassword);
+
     setLoading(true);
-    if (email.length < 4) {
+    if (checkEmail === null) {
+      setLoading(false);
       Alert.alert('Email Invalid');
-    } else if (password.length < 1) {
-      Alert.alert('please input password more than 2');
+    } else if (checkPassword === null) {
+      setLoading(false);
+      Alert.alert('Password must have alphabet and number, min length 8');
     } else if (username.length < 3) {
+      setLoading(false);
       Alert.alert('please input Name more than 3');
     } else if (password !== rePassword) {
+      setLoading(false);
       Alert.alert('Password and RePassword does not match');
     } else {
       await firebase
