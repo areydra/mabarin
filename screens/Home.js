@@ -95,7 +95,6 @@ const Home = props => {
                 </View>
               )}
             </View>
-
           </TouchableOpacity>
           <Text style={styles.eventText}>Coming Soon Event</Text>
           <View>
@@ -135,7 +134,10 @@ const Home = props => {
                     .ref('users/' + user.uid)
                     .update({matching: 'ML'})
                     .then(() => {
-                      props.navigation.navigate('Maps', {match: 'ML'});
+                      props.navigation.navigate('Maps', {
+                        match: 'ML',
+                        matchName: 'Mobile Legends',
+                      });
                     })
                 }>
                 <View style={styles.gameImgBox}>
@@ -155,7 +157,10 @@ const Home = props => {
                     .ref('users/' + user.uid)
                     .update({matching: 'COD'})
                     .then(() => {
-                      props.navigation.navigate('Maps', {match: 'COD'});
+                      props.navigation.navigate('Maps', {
+                        match: 'COD',
+                        matchName: 'Call Of Duty',
+                      });
                     })
                 }>
                 <View style={styles.gameImgBox}>
@@ -175,7 +180,10 @@ const Home = props => {
                     .ref('users/' + user.uid)
                     .update({matching: 'AOV'})
                     .then(() => {
-                      props.navigation.navigate('Maps', {match: 'AOV'});
+                      props.navigation.navigate('Maps', {
+                        match: 'AOV',
+                        matchName: 'Arena Of Valor',
+                      });
                     })
                 }>
                 <View style={styles.gameImgBox}>
@@ -195,7 +203,10 @@ const Home = props => {
                     .ref('users/' + user.uid)
                     .update({matching: 'PUBG'})
                     .then(() => {
-                      props.navigation.navigate('Maps', {match: 'PUBG'});
+                      props.navigation.navigate('Maps', {
+                        match: 'PUBG',
+                        matchName: 'PUBG',
+                      });
                     })
                 }>
                 <View style={styles.gameImgBox}>
@@ -215,7 +226,10 @@ const Home = props => {
                     .ref('users/' + user.uid)
                     .update({matching: 'VG'})
                     .then(() => {
-                      props.navigation.navigate('Maps', {match: 'VG'});
+                      props.navigation.navigate('Maps', {
+                        match: 'VG',
+                        matchName: 'Vain Glory',
+                      });
                     })
                 }>
                 <View style={styles.gameImgBox}>
@@ -235,7 +249,10 @@ const Home = props => {
                     .ref('users/' + user.uid)
                     .update({matching: 'TE'})
                     .then(() => {
-                      props.navigation.navigate('Maps', {match: 'TE'});
+                      props.navigation.navigate('Maps', {
+                        match: 'TE',
+                        matchName: 'Tetris',
+                      });
                     })
                 }>
                 <View style={styles.gameImgBox}>
@@ -377,7 +394,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   gameImg: {
-
     width: '100%',
     flex: 1,
 

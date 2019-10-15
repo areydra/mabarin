@@ -10,6 +10,8 @@ import {
 import {GiftedChat, Bubble, InputToolbar, Send} from 'react-native-gifted-chat';
 import {Icon} from 'native-base';
 
+import firebase from 'firebase';
+
 const {width} = Dimensions.get('window');
 
 class Chat extends Component {
@@ -19,31 +21,69 @@ class Chat extends Component {
       messages: [],
       invited: false,
       friendData: {},
+      user: {},
+      text: '',
     };
   }
   componentDidMount = async () => {
     await this.setState({friendData: this.props.navigation.state.params});
-
-    this.setState({
-      messages: [
-        {
-          _id: 1,
-          text: 'Hello developer',
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-        },
-      ],
-    });
+    const user = firebase.auth().currentUser;
+    await this.setState({user});
+    firebase
+      .database()
+      .ref('messages')
+      .child(user.uid)
+      .child(this.state.friendData.id)
+      .on('child_added', value => {
+        this.setState(previousState => {
+          return {
+            messages: GiftedChat.append(previousState.messages, value.val()),
+          };
+        });
+      });
   };
 
-  onSend = (messages = []) => {
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }));
+  onSend = () => {
+    if (this.state.text.length > 0) {
+      let msgId = firebase
+        .database()
+        .ref('messages')
+        .child(this.state.user.uid)
+        .child(this.state.friendData.id)
+        .push().key;
+      let updates = {};
+      let message = {
+        _id: msgId,
+        text: this.state.text,
+        createdAt: firebase.database.ServerValue.TIMESTAMP,
+        user: {
+          _id: this.state.user.uid,
+          name: this.state.user.displayName,
+          // avatar: this.state.avatar,
+        },
+      };
+      updates[
+        'messages/' +
+          this.state.user.uid +
+          '/' +
+          this.state.friendData.id +
+          '/' +
+          msgId
+      ] = message;
+      updates[
+        'messages/' +
+          this.state.friendData.id +
+          '/' +
+          this.state.user.uid +
+          '/' +
+          msgId
+      ] = message;
+      firebase
+        .database()
+        .ref()
+        .update(updates);
+      this.setState({text: ''});
+    }
   };
 
   renderSend(props) {
@@ -52,7 +92,7 @@ class Chat extends Component {
         <Icon
           type="MaterialCommunityIcons"
           name="send"
-          style={{color: '#004DAA'}}
+          style={{color: '#006aeb'}}
         />
       </Send>
     );
@@ -159,9 +199,10 @@ class Chat extends Component {
             alwaysShowSend={true}
             alignTop={true}
             user={{
-              _id: 1,
+              _id: this.state.user.uid,
+              name: this.state.user.displayName,
             }}
-            // onInputTextChanged={value => this.setState({text: value})}
+            onInputTextChanged={value => this.setState({text: value})}
           />
         </View>
       </Fragment>

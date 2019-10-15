@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 
 import {Icon} from 'native-base';
@@ -27,6 +28,7 @@ class Maps extends Component {
       latitude: 0,
       users: [],
       userId: '',
+      isLoading: true,
     };
   }
 
@@ -92,55 +94,63 @@ class Maps extends Component {
               style={{color: 'white', fontSize: 18}}
             />
           </TouchableOpacity>
-          <Text style={styles.headTitle}>Maps</Text>
+          <Text style={styles.headTitle}>
+            Matching : {this.props.navigation.getParam('matchName')}
+          </Text>
         </View>
-        <View style={styles.container}>
-          <MapView
-            initialRegion={this.state.region}
-            showsUserLocation={true}
-            followUserLocation={true}
-            zoomControlEnabled={false}
-            showsCompass={true}
-            minZoomLevel={0}
-            maxZoomLevel={20}
-            style={styles.map}>
-            {matchUser.map((item, index) => (
-              <Marker
-                key={index}
-                onCalloutPress={() =>
-                  item.id == userId
-                    ? null
-                    : this.props.navigation.navigate('Chat', item)
-                }
-                title={item.id == userId ? 'You' : item.username}
-                coordinate={{
-                  latitude: item.Location.latitude,
-                  longitude: item.Location.longitude,
-                }}>
-                {item.id == userId ? (
-                  <View
-                    style={{
-                      width: 80,
-                      height: 80,
-                    }}>
-                    <Image
-                      source={Mark}
+        {this.state.isLoading == true ? (
+          <View style={styles.container}>
+            <ActivityIndicator color="#006aeb" size={'large'} />
+          </View>
+        ) : (
+          <View style={styles.container}>
+            <MapView
+              initialRegion={this.state.region}
+              showsUserLocation={true}
+              followUserLocation={true}
+              zoomControlEnabled={false}
+              showsCompass={true}
+              minZoomLevel={0}
+              maxZoomLevel={20}
+              style={styles.map}>
+              {matchUser.map((item, index) => (
+                <Marker
+                  key={index}
+                  onCalloutPress={() =>
+                    item.id == userId
+                      ? null
+                      : this.props.navigation.navigate('Chat', item)
+                  }
+                  title={item.id == userId ? 'You' : item.username}
+                  coordinate={{
+                    latitude: item.Location.latitude,
+                    longitude: item.Location.longitude,
+                  }}>
+                  {item.id == userId ? (
+                    <View
                       style={{
-                        flex: 1,
-                        width: '100%',
-                        resizeMode: 'contain',
-                      }}
-                    />
-                  </View>
-                ) : (
-                  <View style={styles.avatar}>
-                    <Image source={{uri: item.photo}} style={styles.image} />
-                  </View>
-                )}
-              </Marker>
-            ))}
-          </MapView>
-        </View>
+                        width: 80,
+                        height: 80,
+                      }}>
+                      <Image
+                        source={Mark}
+                        style={{
+                          flex: 1,
+                          width: '100%',
+                          resizeMode: 'contain',
+                        }}
+                      />
+                    </View>
+                  ) : (
+                    <View style={styles.avatar}>
+                      <Image source={{uri: item.photo}} style={styles.image} />
+                    </View>
+                  )}
+                </Marker>
+              ))}
+            </MapView>
+          </View>
+        )}
       </Fragment>
     );
   }
@@ -169,6 +179,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'whitesmoke',
   },
   map: {
     width: '100%',
@@ -176,7 +187,7 @@ const styles = StyleSheet.create({
   },
   headTitle: {
     marginLeft: 15,
-    fontSize: 18,
+    fontSize: 16,
     color: 'white',
     fontWeight: '700',
   },
