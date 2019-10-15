@@ -34,12 +34,29 @@ const Profile = props => {
   };
   useEffect(() => {
     getUser();
+    // tes();
   }, []);
+  console.log('lalala');
 
+  // const tes = () => {
+  //   const user = firebase.auth().currentUser;
+  //   firebase
+  //     .database()
+  //     .ref(`users/${user.uid}`)
+  //     .on('child_changed', datas => {
+  //       console.log(datas);
+
+  //       let data = datas.val();
+  //       console.log(data);
+  //     });
+  // };
   const name = data.username;
 
   const goHome = () => {
     props.navigation.navigate('Home');
+  };
+  const goEditProfile = () => {
+    props.navigation.navigate('EditProfile');
   };
 
   return (
@@ -73,17 +90,31 @@ const Profile = props => {
                   {name.length > 8 ? name.substr(0, 8) + '...' : name}
                 </Text>
 
-                <Text style={styles.match}>0,61</Text>
+                <Text style={styles.match}>0,62</Text>
               </View>
               <View style={styles.statusBox}>
                 {data.premium ? (
-                  <View style={styles.premiumBox}>
-                    <Text style={styles.premium}>Premium</Text>
-                  </View>
+                  <>
+                    <View style={styles.premiumBox}>
+                      <Text style={styles.premium}>Premium</Text>
+                    </View>
+                    <TouchableOpacity onPress={goEditProfile}>
+                      <View style={styles.editBox}>
+                        <Text style={styles.edit}>Edit Profile</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </>
                 ) : (
-                  <View style={styles.premiumBoxOf}>
-                    <Text style={styles.premiumOf}>Basic</Text>
-                  </View>
+                  <>
+                    <View style={styles.premiumBoxOf}>
+                      <Text style={styles.premiumOf}>Basic</Text>
+                    </View>
+                    <TouchableOpacity onPress={goEditProfile}>
+                      <View style={styles.editBox}>
+                        <Text style={styles.edit}>Edit Profile</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </>
                 )}
               </View>
             </>
@@ -160,7 +191,6 @@ const styles = StyleSheet.create({
     borderRadius: 160,
     marginRight: 20,
     overflow: 'hidden',
-    backgroundColor: 'rgba(0,0,0,0.2)',
   },
   img: {
     width: '100%',
@@ -180,10 +210,17 @@ const styles = StyleSheet.create({
     marginRight: 10,
     fontWeight: '700',
   },
+  editBox: {
+    marginTop: 10,
+    borderColor: '#3355ff',
+    borderWidth: 1,
+    borderRadius: 6,
+  },
   edit: {
-    color: 'white',
-    fontSize: 12,
-    paddingTop: 5,
+    fontSize: 15,
+    color: '#3355ff',
+    paddingVertical: 5,
+    paddingHorizontal: 15,
   },
   match: {
     fontSize: 12,
