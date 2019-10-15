@@ -11,7 +11,9 @@ import {
 
 import { Icon } from 'native-base';
 import geolocation from '@react-native-community/geolocation';
-import MapView, { Marker } from 'react-native-maps';
+
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+
 import firebase from 'firebase';
 import PushNotification from 'react-native-push-notification'
 
@@ -124,8 +126,10 @@ class Maps extends Component {
             <ActivityIndicator color="#006aeb" size={'large'} />
           </View>
         ) : (
+
             <View style={styles.container}>
               <MapView
+                provider={PROVIDER_GOOGLE}
                 initialRegion={this.state.region}
                 showsUserLocation={true}
                 followUserLocation={true}
