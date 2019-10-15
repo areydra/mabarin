@@ -31,7 +31,10 @@ class Maps extends Component {
       latitude: 0,
       users: [],
       userId: '',
-      isLoading: true
+      isLoading: true,
+      notification : [],
+      person: [],
+      user: []
     };
   }
 
@@ -58,25 +61,33 @@ class Maps extends Component {
       this.changeRegion(Location, Location.latitude, Location.longitude);
     });
     let uid = user.uid
-    firebase.database().ref('/messages/' + uid).limitToLast(1).on('value', user => {
-      firebase.database().ref('/messages/' + uid + '/' + Object.keys(user.val())[0]).limitToLast(1).once('value', lastMessage => {
-        let messageUser = lastMessage.val()[Object.keys(lastMessage.val())]
-        firebase.database().ref('users/'+Object.keys(user.val())[0]).once('value', person => {
-          if(messageUser.user._id !== uid){
-            PushNotification.localNotification({
-              title: "Message from " + person.val().username,
-              message: messageUser.text,
-              playSound: true
-            })
-            PushNotification.configure({
-              onNotification: notif => {
-                if (notif.userInteraction) this.props.navigation.navigate('Chat', person.val())
-              }
-            })          
-          }
-        })
-      })
+    
+    firebase.database().ref('/messages/' + uid).limitToLast(1).once('value', user => {
+      if(user.val()){
+        this.setState({ user: user.val() })
+      }
     })
+
+    firebase.database().ref('users/' + Object.keys(this.state.user)).once('value', async (person) => {
+      this.setState({ person: person.val() })
+    })
+
+    firebase.database().ref('/messages/' + uid + '/' + Object.keys(this.state.user)).limitToLast(1).on('child_added', lastMessage => {
+      if(lastMessage.val()){
+        let messageUser = lastMessage.val()
+        let notification = [{
+          username: this.state.person.username,
+          message: messageUser.text,
+          createdAt: messageUser.createdAt,
+          from: messageUser.user._id,
+          personDetail: this.state.person
+        }]
+        if(!this.state.notification.length){
+          this.setState({ notification })
+        }
+      }
+    })
+
   };
 
   usersLocation = () => {
@@ -102,7 +113,30 @@ class Maps extends Component {
     });
   };
 
+  sendNotification = async() => {
+    if (this.state.notification.length) {
+      const user = firebase.auth().currentUser
+      const { username, message, from, personDetail } = this.state.notification[0]
+
+      if(user.uid !== from){
+        PushNotification.localNotification({
+          title: "Message from " + username,
+          message: message,
+          playSound: true
+        })
+        PushNotification.configure({
+          onNotification: notif => {
+            if (notif.userInteraction) this.props.navigation.navigate('Chat', personDetail)
+          }
+        })
+        this.setState({ notification: [] })
+      }
+    }
+  }
+
   render() {
+    this.sendNotification()
+
     const { userId } = this.state;
     const matchUser = this.state.users.filter(
       user => user.matching === this.props.navigation.getParam('match'),
