@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   Text,
   View,
@@ -9,14 +9,15 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import {Icon} from 'native-base';
+import { Icon } from 'native-base';
 import geolocation from '@react-native-community/geolocation';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import firebase from 'firebase';
+import PushNotification from 'react-native-push-notification'
 
-import {withNavigation} from 'react-navigation';
+import { withNavigation } from 'react-navigation';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 import Mark from '../assets/image/MabarinMarker.png';
 
 class Maps extends Component {
@@ -28,7 +29,7 @@ class Maps extends Component {
       latitude: 0,
       users: [],
       userId: '',
-      isLoading: true,
+      isLoading: true
     };
   }
 
@@ -36,7 +37,7 @@ class Maps extends Component {
     await this.usersLocation();
     const user = firebase.auth().currentUser;
 
-    await this.setState({userId: user.uid});
+    await this.setState({ userId: user.uid });
 
     await geolocation.getCurrentPosition(position => {
       let Location = {
@@ -48,12 +49,32 @@ class Maps extends Component {
       firebase
         .database()
         .ref('users/' + this.state.userId)
-        .update({Location})
+        .update({ Location })
         .then(() => {
-          this.setState({isLoading: false});
+          this.setState({ isLoading: false });
         });
       this.changeRegion(Location, Location.latitude, Location.longitude);
     });
+    let uid = user.uid
+    firebase.database().ref('/messages/' + uid).limitToLast(1).on('value', user => {
+      firebase.database().ref('/messages/' + uid + '/' + Object.keys(user.val())[0]).limitToLast(1).once('value', lastMessage => {
+        let messageUser = lastMessage.val()[Object.keys(lastMessage.val())]
+        firebase.database().ref('users/'+Object.keys(user.val())[0]).once('value', person => {
+          if(messageUser.user._id !== uid){
+            PushNotification.localNotification({
+              title: "Message from " + person.val().username,
+              message: messageUser.text,
+              playSound: true
+            })
+            PushNotification.configure({
+              onNotification: notif => {
+                if (notif.userInteraction) this.props.navigation.navigate('Chat', person.val())
+              }
+            })          
+          }
+        })
+      })
+    })
   };
 
   usersLocation = () => {
@@ -80,7 +101,7 @@ class Maps extends Component {
   };
 
   render() {
-    const {userId} = this.state;
+    const { userId } = this.state;
     const matchUser = this.state.users.filter(
       user => user.matching === this.props.navigation.getParam('match'),
     );
@@ -91,7 +112,7 @@ class Maps extends Component {
             <Icon
               type="AntDesign"
               name="left"
-              style={{color: 'white', fontSize: 18}}
+              style={{ color: 'white', fontSize: 18 }}
             />
           </TouchableOpacity>
           <Text style={styles.headTitle}>
@@ -103,54 +124,54 @@ class Maps extends Component {
             <ActivityIndicator color="#006aeb" size={'large'} />
           </View>
         ) : (
-          <View style={styles.container}>
-            <MapView
-              initialRegion={this.state.region}
-              showsUserLocation={true}
-              followUserLocation={true}
-              zoomControlEnabled={false}
-              showsCompass={true}
-              minZoomLevel={0}
-              maxZoomLevel={20}
-              style={styles.map}>
-              {matchUser.map((item, index) => (
-                <Marker
-                  key={index}
-                  onCalloutPress={() =>
-                    item.id == userId
-                      ? null
-                      : this.props.navigation.navigate('Chat', item)
-                  }
-                  title={item.id == userId ? 'You' : item.username}
-                  coordinate={{
-                    latitude: item.Location.latitude,
-                    longitude: item.Location.longitude,
-                  }}>
-                  {item.id == userId ? (
-                    <View
-                      style={{
-                        width: 80,
-                        height: 80,
-                      }}>
-                      <Image
-                        source={Mark}
+            <View style={styles.container}>
+              <MapView
+                initialRegion={this.state.region}
+                showsUserLocation={true}
+                followUserLocation={true}
+                zoomControlEnabled={false}
+                showsCompass={true}
+                minZoomLevel={0}
+                maxZoomLevel={20}
+                style={styles.map}>
+                {matchUser.map((item, index) => (
+                  <Marker
+                    key={index}
+                    onCalloutPress={() =>
+                      item.id == userId
+                        ? null
+                        : this.props.navigation.navigate('Chat', item)
+                    }
+                    title={item.id == userId ? 'You' : item.username}
+                    coordinate={{
+                      latitude: item.Location.latitude,
+                      longitude: item.Location.longitude,
+                    }}>
+                    {item.id == userId ? (
+                      <View
                         style={{
-                          flex: 1,
-                          width: '100%',
-                          resizeMode: 'contain',
-                        }}
-                      />
-                    </View>
-                  ) : (
-                    <View style={styles.avatar}>
-                      <Image source={{uri: item.photo}} style={styles.image} />
-                    </View>
-                  )}
-                </Marker>
-              ))}
-            </MapView>
-          </View>
-        )}
+                          width: 80,
+                          height: 80,
+                        }}>
+                        <Image
+                          source={Mark}
+                          style={{
+                            flex: 1,
+                            width: '100%',
+                            resizeMode: 'contain',
+                          }}
+                        />
+                      </View>
+                    ) : (
+                        <View style={styles.avatar}>
+                          <Image source={{ uri: item.photo }} style={styles.image} />
+                        </View>
+                      )}
+                  </Marker>
+                ))}
+              </MapView>
+            </View>
+          )}
       </Fragment>
     );
   }
