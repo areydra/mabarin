@@ -37,10 +37,11 @@ const styles = StyleSheet.create({
     title: {
         color: 'white',
         fontSize: 20,
+        fontWeight: 'bold',
         marginBottom: 10
     },
     titlePerson: {
-        fontSize: 17,
+        fontSize: 15,
         color: 'white',
         marginBottom: 5
     },
