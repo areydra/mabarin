@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ToastAndroid,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import firebase from 'firebase';
 
@@ -25,33 +26,40 @@ const Login = props => {
   };
 
   const onLogin = async () => {
-    setLoading(true);
-    await firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(result => {
-        firebase
-          .database()
-          .ref(`users/${result.user.uid}`)
-          .update({status: 'online'});
-        setEmail('');
-        setPassword('');
-        setLoading(false);
-        props.navigation.navigate('Home');
-        ToastAndroid.show(
-          'Login Success',
-          ToastAndroid.LONG,
-          ToastAndroid.CENTER,
-        );
-      })
-      .catch(err => {
-        ToastAndroid.show(
-          'User Atau Password Salah',
-          ToastAndroid.LONG,
-          ToastAndroid.CENTER,
-        );
-        setLoading(false);
-      });
+    const validEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/gim;
+    let checkEmail = email.match(validEmail);
+    console.log('validasi', checkEmail);
+    if (checkEmail == null) {
+      Alert.alert('Email Invalid');
+    } else {
+      setLoading(true);
+      await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(result => {
+          firebase
+            .database()
+            .ref(`users/${result.user.uid}`)
+            .update({status: 'online'});
+          setEmail('');
+          setPassword('');
+          setLoading(false);
+          props.navigation.navigate('Home');
+          ToastAndroid.show(
+            'Login Success',
+            ToastAndroid.LONG,
+            ToastAndroid.CENTER,
+          );
+        })
+        .catch(err => {
+          ToastAndroid.show(
+            'User Atau Password Salah',
+            ToastAndroid.LONG,
+            ToastAndroid.CENTER,
+          );
+          setLoading(false);
+        });
+    }
   };
 
   return (
