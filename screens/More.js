@@ -39,6 +39,15 @@ const More = props => {
         <View style={styles.container}>
           <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.5}>
             <View style={styles.menu}>
+              <Text style={styles.menuText}>Profile</Text>
+              <Image
+                source={require('../assets/icons/right-arrow.png')}
+                style={styles.menuIcon}
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.5}>
+            <View style={styles.menu}>
               <Text style={styles.menuText}>Settings</Text>
               <Image
                 source={require('../assets/icons/right-arrow.png')}
