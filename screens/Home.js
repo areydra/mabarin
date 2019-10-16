@@ -18,8 +18,7 @@ import {getEventList} from '../redux/action/eventList';
 const {width, height} = Dimensions.get('window');
 const Home = props => {
   const [data, setData] = useState('');
-  const [game, setGame] = useState('');
-  const [event, setEvent] = useState('');
+
   const user = firebase.auth().currentUser;
 
   const goProfile = () => {
@@ -29,8 +28,10 @@ const Home = props => {
     props.navigation.navigate('Events');
   };
 
-  const getUser = async () => {
+  const getData = async () => {
     const user = firebase.auth().currentUser;
+    await props.dispatch(getGameList());
+    await props.dispatch(getEventList());
 
     await firebase
       .database()
@@ -67,20 +68,8 @@ const Home = props => {
     });
   };
 
-  const getGameLists = () => {
-    props.dispatch(getGameList());
-    setGame(props.gameList);
-  };
-
-  const getEventLists = () => {
-    props.dispatch(getEventList());
-    setEvent(props.eventList);
-  };
-
   useEffect(() => {
-    getEventLists();
-    getGameLists();
-    getUser();
+    getData();
     setMatching();
   }, []);
 
@@ -132,16 +121,17 @@ const Home = props => {
               )}
             </View>
           </TouchableOpacity>
-          <Text style={styles.eventText}>Coming Soon Event</Text>
-          <View>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              {event.length > 0
-                ? event.map((data, index) => {
+          {props.eventList.length > 0 && props.gameList.length > 0 ? (
+            <>
+              <Text style={styles.eventText}>Coming Soon Event</Text>
+              <View>
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}>
+                  {props.eventList.map((data, index) => {
                     return (
                       <TouchableOpacity onPress={goEvent}>
-                        <View style={styles.eventBox}>
+                        <View key={index} style={styles.eventBox}>
                           <Image
                             style={styles.eventImg}
                             source={{uri: data.image}}
@@ -149,23 +139,21 @@ const Home = props => {
                         </View>
                       </TouchableOpacity>
                     );
-                  })
-                : null}
-            </ScrollView>
-          </View>
-          <Text style={styles.textMabar}>
-            Mabar Now!
-            <Text style={styles.subTit}>&nbsp;&nbsp;Find Your Crew</Text>
-          </Text>
+                  })}
+                </ScrollView>
+              </View>
+              <Text style={styles.textMabar}>
+                Mabar Now!
+                <Text style={styles.subTit}>&nbsp;&nbsp;Find Your Crew</Text>
+              </Text>
 
-          <View style={styles.asing}>
-            <View style={styles.game}>
-              {game.length > 0
-                ? game.map((data, index) => {
+              <View style={styles.asing}>
+                <View style={styles.game}>
+                  {props.gameList.map((data, index) => {
                     return (
                       <TouchableOpacity
                         onPress={() => goMaps(data.name, data._id)}>
-                        <View style={styles.gameImgBox}>
+                        <View key={index} style={styles.gameImgBox}>
                           <Image
                             style={styles.gameImg}
                             source={{uri: data.image}}
@@ -173,10 +161,19 @@ const Home = props => {
                         </View>
                       </TouchableOpacity>
                     );
-                  })
-                : null}
+                  })}
+                </View>
+              </View>
+            </>
+          ) : (
+            <View style={styles.loadingBox2}>
+              <ActivityIndicator
+                color="#006aeb"
+                size="large"
+                style={styles.loading2}
+              />
             </View>
-          </View>
+          )}
         </ScrollView>
       </View>
     </Fragment>
@@ -198,6 +195,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loading: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingBox2: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: height / 1.34,
+  },
+  loading2: {
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -325,7 +331,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     gameList: state.gameList.gameList,
-    eventList: state.eventList.eventLists,
+    eventList: state.eventList.eventList,
   };
 };
 
