@@ -160,7 +160,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   texReg2: {
-    color: '#004DAA',
+    color: '#006aeb',
+    fontWeight: '700',
   },
 });
 

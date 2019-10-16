@@ -95,7 +95,7 @@ const Profile = props => {
                 {data.premium ? (
                   <>
                     <View style={styles.premiumBox}>
-                      <Text style={styles.premium}>Premium</Text>
+                      <Text style={styles.premium}>PREMIUM</Text>
                     </View>
                   </>
                 ) : (
@@ -104,7 +104,7 @@ const Profile = props => {
                       activeOpacity={0.9}
                       style={styles.premiumBoxOf}
                       onPress={() => props.navigation.navigate('BuyPremium')}>
-                      <Text style={styles.premiumOf}>Basic</Text>
+                      <Text style={styles.premiumOf}>BASIC</Text>
                     </TouchableOpacity>
                   </>
                 )}
@@ -126,22 +126,6 @@ const Profile = props => {
           : props.userData.mabarhistory.map((item, index) => {
               return <Card key={index} data={item} />;
             })}
-        {/* <View style={styles.historBox}> */}
-        {/* <View style={styles.historyImgBox}>
-            <Image
-              style={styles.historyImg}
-              source={{
-                uri:
-                  'http://www.galamedianews.com/media/news/191011214614-orang.png',
-              }}
-            />
-          </View>
-          <View style={styles.contenBox}>
-            <Text style={styles.nameGame}>CEODE</Text>
-            <Text style={styles.playWith}>Play With Kunti</Text>
-            <Text style={styles.status}>Never Stop</Text>
-          </View> */}
-        {/* </View> */}
       </View>
     </Fragment>
   );

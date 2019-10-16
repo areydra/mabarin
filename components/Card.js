@@ -20,7 +20,7 @@ const Card = props => {
               name="user"
               style={{color: 'white', fontSize: 14}}
             />
-            &nbsp; Playing with {props.data.uidfriend}
+            &nbsp; Playing with {props.data.namefriend}
           </Text>
           <Text style={styles.titleDate}>
             {Moment(props.data.date).format('D MMM, YYYY, h:mm:ss a')}

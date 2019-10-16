@@ -19,16 +19,27 @@ class Chat extends Component {
     super();
     this.state = {
       messages: [],
-      invited: false,
       friendData: {},
       user: {},
       text: '',
+      statusMatch: '',
     };
   }
+
   componentDidMount = async () => {
     await this.setState({friendData: this.props.navigation.state.params});
     const user = firebase.auth().currentUser;
     await this.setState({user});
+    firebase
+      .database()
+      .ref('users/' + user.uid)
+      .on('value', res => {
+        let data = res.val();
+        if (data.statusMatch) {
+          this.setState({statusMatch: data.statusMatch});
+        }
+      });
+
     firebase
       .database()
       .ref('messages')
@@ -86,6 +97,13 @@ class Chat extends Component {
     }
   };
 
+  invite = () => {
+    firebase
+      .database()
+      .ref('users/' + this.state.friendData.id)
+      .update({statusMatch: 'invited'});
+  };
+
   renderSend(props) {
     return (
       <Send {...props} containerStyle={{marginRight: 10, marginBottom: 10}}>
@@ -125,21 +143,45 @@ class Chat extends Component {
     );
   }
 
+  acceptInvite = () => {
+    firebase
+      .database()
+      .ref('users/' + this.state.friendData.id)
+      .update({statusMatch: 'inMatch'});
+
+    firebase
+      .database()
+      .ref('users/' + this.state.user.uid)
+      .update({statusMatch: 'inMatch'});
+    this.setState({statusMatch: 'inMatch'});
+  };
+
+  declineInvite = () => {
+    firebase
+      .database()
+      .ref('users/' + this.state.user.uid)
+      .update({statusMatch: null});
+    this.setState({statusMatch: null});
+  };
+
   render() {
     const {friendData} = this.state;
+    console.log('state StatusMatch', this.state.statusMatch);
     return (
       <Fragment>
         {/* Overlay Notif */
 
-        this.state.invited === false ? null : (
+        this.state.statusMatch === 'invited' ? (
           <View style={styles.overlay}>
             <View style={styles.modal}>
               <View style={styles.inv}>
-                <Text>Has invited you</Text>
+                <Text>{this.state.friendData.username} Has invited you</Text>
               </View>
               <View style={styles.buttonMenu}>
                 <View style={styles.butJoin}>
-                  <TouchableOpacity activeOpacity={0.9}>
+                  <TouchableOpacity
+                    activeOpacity={0.9}
+                    onPress={() => this.declineInvite()}>
                     <Text
                       style={{color: 'red', fontSize: 16, fontWeight: '700'}}>
                       Decline
@@ -148,10 +190,15 @@ class Chat extends Component {
                 </View>
                 <View style={styles.butJoin}>
                   <TouchableOpacity
+                    onPress={() => this.acceptInvite}
                     activeOpacity={0.8}
                     style={styles.butAccept}>
                     <Text
-                      style={{color: 'white', fontSize: 16, fontWeight: '700'}}>
+                      style={{
+                        color: 'white',
+                        fontSize: 16,
+                        fontWeight: '700',
+                      }}>
                       Accept
                     </Text>
                   </TouchableOpacity>
@@ -159,7 +206,7 @@ class Chat extends Component {
               </View>
             </View>
           </View>
-        )}
+        ) : null}
         {/* Overlay Notif END */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
@@ -182,7 +229,10 @@ class Chat extends Component {
             </View>
           </View>
           <View style={styles.but}>
-            <TouchableOpacity activeOpacity={0.8} style={styles.button}>
+            <TouchableOpacity
+              onPress={() => this.invite()}
+              activeOpacity={0.8}
+              style={styles.button}>
               <Text style={{fontSize: 18, color: '#00c91e'}}>Invite</Text>
             </TouchableOpacity>
           </View>
@@ -279,6 +329,7 @@ const styles = StyleSheet.create({
     width: 45,
     borderRadius: 100,
     marginLeft: 15,
+    overflow: 'hidden',
   },
   headSub: {
     flex: 2,

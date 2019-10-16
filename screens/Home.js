@@ -101,11 +101,11 @@ const Home = props => {
                   <View style={styles.statusBox}>
                     {data.premium ? (
                       <View style={styles.premiumBox}>
-                        <Text style={styles.premium}>Premium</Text>
+                        <Text style={styles.premium}>PREMIUM</Text>
                       </View>
                     ) : (
                       <View style={styles.premiumBoxOf}>
-                        <Text style={styles.premiumOf}>Basic</Text>
+                        <Text style={styles.premiumOf}>BASIC</Text>
                       </View>
                     )}
                   </View>
@@ -130,7 +130,7 @@ const Home = props => {
                   showsHorizontalScrollIndicator={false}>
                   {props.eventList.map((data, index) => {
                     return (
-                      <TouchableOpacity onPress={goEvent}>
+                      <TouchableOpacity activeOpacity={0.8} onPress={goEvent}>
                         <View key={index} style={styles.eventBox}>
                           <Image
                             style={styles.eventImg}
@@ -152,6 +152,7 @@ const Home = props => {
                   {props.gameList.map((data, index) => {
                     return (
                       <TouchableOpacity
+                        activeOpacity={0.8}
                         onPress={() => goMaps(data.name, data._id)}>
                         <View key={index} style={styles.gameImgBox}>
                           <Image
