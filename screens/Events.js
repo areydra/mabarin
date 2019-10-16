@@ -61,7 +61,7 @@ const Events = () => {
               felis imperdiet proin fermentum leo vel orci. Amet mattis
               vulputate enim nulla aliquet porttitor lacus. Parturient montes
               nascetur ridiculus mus mauris. Et ligula ullamcorper malesuada
-              proin libero.
+              proin libersasaso.
             </Text>
           </View>
 

@@ -11,10 +11,20 @@ import {
 } from 'react-native';
 
 import {Icon} from 'native-base';
+import firebase from 'firebase';
 
 const {width} = Dimensions.get('window');
 
 const BuyPremium = props => {
+  const getPremium = async () => {
+    const user = firebase.auth().currentUser;
+    await firebase
+      .database()
+      .ref(`users/${user.uid}`)
+      .update({premium: true});
+    props.navigation.navigate('Home');
+  };
+
   return (
     <SafeAreaView style={styles.buyPremiumContainer}>
       <View style={styles.header}>
@@ -53,9 +63,11 @@ const BuyPremium = props => {
             </Text>
           </View>
           <Text style={styles.price}>$50</Text>
-          <View style={styles.buttonBuy}>
-            <Text style={styles.buttonText}>Buy Premium</Text>
-          </View>
+          <TouchableOpacity onPress={getPremium}>
+            <View style={styles.buttonBuy}>
+              <Text style={styles.buttonText}>Buy Premium</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

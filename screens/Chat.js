@@ -6,9 +6,11 @@ import {
   Dimensions,
   View,
   Image,
+  ToastAndroid,
 } from 'react-native';
 import {GiftedChat, Bubble, InputToolbar, Send} from 'react-native-gifted-chat';
 import {Icon} from 'native-base';
+import {connect} from 'react-redux';
 
 import firebase from 'firebase';
 
@@ -56,6 +58,8 @@ class Chat extends Component {
 
   onSend = () => {
     if (this.state.text.length > 0) {
+      console.log(this.props.navigation);
+      this.props.navigation.state.params.onResetRunNotif;
       let msgId = firebase
         .database()
         .ref('messages')
@@ -98,10 +102,21 @@ class Chat extends Component {
   };
 
   invite = () => {
-    firebase
-      .database()
-      .ref('users/' + this.state.friendData.id)
-      .update({statusMatch: 'invited'});
+    if (this.state.user.statusMatch !== 'Invited') {
+      console.log('Asdqweqwe');
+      firebase
+        .database()
+        .ref('users/' + this.state.friendData.id)
+        .update({statusMatch: 'invited'});
+    } else {
+      console.log('Awokwkowko');
+
+      ToastAndroid.show(
+        'Udah ada yang punya kak',
+        ToastAndroid.LONG,
+        ToastAndroid.CENTER,
+      );
+    }
   };
 
   renderSend(props) {
@@ -143,13 +158,19 @@ class Chat extends Component {
     );
   }
 
-  acceptInvite = () => {
-    firebase
+  acceptInvite = async () => {
+    let matchData = {
+      senderId: this.state.user.uid,
+      senderName: this.state.user.displayName,
+      createdAt: new Date(),
+      statusMatch: 'Invited',
+    };
+    await firebase
       .database()
       .ref('users/' + this.state.friendData.id)
       .update({statusMatch: 'inMatch'});
 
-    firebase
+    await firebase
       .database()
       .ref('users/' + this.state.user.uid)
       .update({statusMatch: 'inMatch'});
@@ -350,4 +371,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Chat;
+export default connect()(Chat);

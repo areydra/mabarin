@@ -8,3 +8,11 @@ export const getUser = uid => {
     ),
   };
 };
+export const sendHistory = data => {
+  return {
+    type: 'POST_HISTORY',
+    payload: Axios.patch(
+      `http://18.141.12.25:6969/api/users/uid/pwdj337j3k3bj3b3rkrr`,
+    ),
+  };
+};
