@@ -148,7 +148,7 @@ const Register = props => {
           </View>
         </TouchableOpacity>
         <View style={styles.boxReg}>
-          <Text style={styles.texReg1}>Don't have any account?</Text>
+          <Text style={styles.texReg1}>Already have account?</Text>
           <TouchableOpacity onPress={goRegister}>
             <Text style={styles.texReg2}> Login</Text>
           </TouchableOpacity>
@@ -205,7 +205,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   texReg2: {
-    color: '#004DAA',
+    color: '#006aeb',
+    fontWeight: '700',
   },
 });
 

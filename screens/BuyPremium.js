@@ -36,7 +36,7 @@ const BuyPremium = props => {
             style={styles.image}
           />
           <View style={styles.textPremiumContainer}>
-            <Text style={styles.textPremium}>Premium</Text>
+            <Text style={styles.textPremium}>PREMIUM</Text>
           </View>
           <View style={styles.textDescriptionContainer}>
             <Text style={styles.textDescription}>
@@ -52,7 +52,7 @@ const BuyPremium = props => {
               proin libero.
             </Text>
           </View>
-          <Text style={styles.price}>$25</Text>
+          <Text style={styles.price}>$50</Text>
           <View style={styles.buttonBuy}>
             <Text style={styles.buttonText}>Buy Premium</Text>
           </View>
@@ -98,14 +98,16 @@ const styles = StyleSheet.create({
     marginTop: width / 20,
     borderColor: '#DDC535',
     borderWidth: 1,
-    width: 85,
+    width: 110,
     borderRadius: 5,
+    padding: 5,
   },
   textPremium: {
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 17,
+    fontSize: 16,
     color: '#DDC535',
+    letterSpacing: 2,
   },
   textDescriptionContainer: {
     marginTop: 10,
