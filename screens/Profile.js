@@ -17,40 +17,27 @@ const {width, height} = Dimensions.get('window');
 const Profile = props => {
   const [data, setData] = useState('');
   const [img, setImg] = useState('');
+  const [username, setUserName] = useState('');
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   const getUser = () => {
     const user = firebase.auth().currentUser;
+    console.log(user.uid);
     firebase
       .database()
       .ref(`users/${user.uid}`)
-      .once('value')
-      .then(result => {
-        let datas = result.val();
-        if (datas !== null) {
-          setData(datas);
-          setImg(datas.photo);
-        }
+
+      .on('value', datas => {
+        let data = datas.val();
+        setImg(data.photo);
+        setData(data);
+        setUserName(data.username);
       });
   };
-  useEffect(() => {
-    getUser();
-    // tes();
-  }, []);
-  console.log('lalala');
-
-  // const tes = () => {
-  //   const user = firebase.auth().currentUser;
-  //   firebase
-  //     .database()
-  //     .ref(`users/${user.uid}`)
-  //     .on('child_changed', datas => {
-  //       console.log(datas);
-
-  //       let data = datas.val();
-  //       console.log(data);
-  //     });
-  // };
-  const name = data.username;
+  const name = username;
 
   const goHome = () => {
     props.navigation.navigate('Home');

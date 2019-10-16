@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import firebase from 'firebase';
-import PushNotification from 'react-native-push-notification'
+import PushNotification from 'react-native-push-notification';
 
 import ML from '../assets/image/ML.jpg';
 import AOV from '../assets/image/AOV.jpg';
@@ -20,7 +20,7 @@ import TE from '../assets/image/TE.jpg';
 import eventOne from '../assets/image/eventOne.jpg';
 import eventTwo from '../assets/image/eventTwo.jpg';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const Home = props => {
   const [data, setData] = useState('');
   const user = firebase.auth().currentUser;
@@ -30,11 +30,12 @@ const Home = props => {
 
   const getUser = async () => {
     const user = firebase.auth().currentUser;
+
     await firebase
       .database()
       .ref(`users/${user.uid}`)
-      .once('value')
-      .then(result => {
+
+      .on('value', result => {
         let data = result.val();
 
         if (data !== null) {
@@ -48,7 +49,7 @@ const Home = props => {
       firebase
         .database()
         .ref('users/' + user.uid)
-        .update({ matching: null });
+        .update({matching: null});
     });
   };
 
@@ -88,21 +89,21 @@ const Home = props => {
                         <Text style={styles.premium}>Premium</Text>
                       </View>
                     ) : (
-                        <View style={styles.premiumBoxOf}>
-                          <Text style={styles.premiumOf}>Basic</Text>
-                        </View>
-                      )}
+                      <View style={styles.premiumBoxOf}>
+                        <Text style={styles.premiumOf}>Basic</Text>
+                      </View>
+                    )}
                   </View>
                 </>
               ) : (
-                  <View style={styles.loadingBox}>
-                    <ActivityIndicator
-                      color="#006aeb"
-                      size="large"
-                      style={styles.loading}
-                    />
-                  </View>
-                )}
+                <View style={styles.loadingBox}>
+                  <ActivityIndicator
+                    color="#006aeb"
+                    size="large"
+                    style={styles.loading}
+                  />
+                </View>
+              )}
             </View>
           </TouchableOpacity>
           <Text style={styles.eventText}>Coming Soon Event</Text>
@@ -134,7 +135,7 @@ const Home = props => {
                   firebase
                     .database()
                     .ref('users/' + user.uid)
-                    .update({ matching: 'ML' })
+                    .update({matching: 'ML'})
                     .then(() => {
                       props.navigation.navigate('Maps', {
                         match: 'ML',
@@ -151,7 +152,7 @@ const Home = props => {
                   firebase
                     .database()
                     .ref('users/' + user.uid)
-                    .update({ matching: 'COD' })
+                    .update({matching: 'COD'})
                     .then(() => {
                       props.navigation.navigate('Maps', {
                         match: 'COD',
@@ -174,7 +175,7 @@ const Home = props => {
                   firebase
                     .database()
                     .ref('users/' + user.uid)
-                    .update({ matching: 'AOV' })
+                    .update({matching: 'AOV'})
                     .then(() => {
                       props.navigation.navigate('Maps', {
                         match: 'AOV',
@@ -191,7 +192,7 @@ const Home = props => {
                   firebase
                     .database()
                     .ref('users/' + user.uid)
-                    .update({ matching: 'PUBG' })
+                    .update({matching: 'PUBG'})
                     .then(() => {
                       props.navigation.navigate('Maps', {
                         match: 'PUBG',
@@ -208,7 +209,7 @@ const Home = props => {
                   firebase
                     .database()
                     .ref('users/' + user.uid)
-                    .update({ matching: 'VG' })
+                    .update({matching: 'VG'})
                     .then(() => {
                       props.navigation.navigate('Maps', {
                         match: 'VG',
@@ -225,7 +226,7 @@ const Home = props => {
                   firebase
                     .database()
                     .ref('users/' + user.uid)
-                    .update({ matching: 'TE' })
+                    .update({matching: 'TE'})
                     .then(() => {
                       props.navigation.navigate('Maps', {
                         match: 'TE',
@@ -295,7 +296,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     textShadowColor: 'black',
-    textShadowOffset: { width: 5, height: 3 },
+    textShadowOffset: {width: 5, height: 3},
     textShadowRadius: 5,
   },
   match: {

@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,22 +7,41 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  PermissionsAndroid,
+  ToastAndroid,
   Alert,
 } from 'react-native';
 import {Header, Left, Right, Body, Icon} from 'native-base';
 import firebase from 'firebase';
+import ImagePicker from 'react-native-image-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const {height, width} = Dimensions.get('window');
 
 const editProfile = props => {
   const [userName, setUserName] = useState('');
+  const [img, setImg] = useState('');
 
   const goProfile = () => {
     props.navigation.navigate('Profile');
   };
 
-  const user = firebase.auth().currentUser.photoURL;
-  console.log(userName);
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const getUser = () => {
+    const user = firebase.auth().currentUser;
+    console.log(user.uid);
+    firebase
+      .database()
+      .ref(`users/${user.uid}`)
+
+      .on('value', datas => {
+        let data = datas.val();
+        setImg(data.photo);
+      });
+  };
 
   const onSave = async () => {
     const user = firebase.auth().currentUser.uid;
@@ -35,6 +54,70 @@ const editProfile = props => {
         .update({username: userName});
       goProfile();
     }
+  };
+
+  const imagePic = async () => {
+    const user = firebase.auth().currentUser.uid;
+    let Blob = RNFetchBlob.polyfill.Blob;
+    const fs = RNFetchBlob.fs;
+    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
+    window.Blob = Blob;
+
+    const options = {
+      title: 'Select Image',
+
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    await PermissionsAndroid.requestMultiple([
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+    ])
+      .then(result => {
+        if (
+          result['android.permission.CAMERA'] === 'granted' &&
+          result['android.permission.READ_EXTERNAL_STORAGE'] === 'granted' &&
+          result['android.permission.WRITE_EXTERNAL_STORAGE'] === 'granted'
+        ) {
+          ImagePicker.showImagePicker(options, response => {
+            let uploadBob = null;
+            const imageRef = firebase.storage().ref(`profile/${user}`);
+            fs.readFile(response.path, 'base64')
+              .then(data => {
+                return Blob.build(data, {type: `${response.mime};BASE64`});
+              })
+              .then(blob => {
+                uploadBob = blob;
+                return imageRef.put(blob, {contentType: `${response.mime}`});
+              })
+              .then(() => {
+                uploadBob.close();
+                return imageRef.getDownloadURL();
+              })
+              .then(async url => {
+                firebase
+                  .database()
+                  .ref(`users/${user}`)
+                  .update({photo: url});
+                setImg(url).catch(err => console.log(err));
+              });
+          });
+        } else if (
+          result['android.permission.CAMERA'] === 'denied' &&
+          result['android.permission.READ_EXTERNAL_STORAGE'] === 'denied' &&
+          result['android.permission.WRITE_EXTERNAL_STORAGE'] === 'denied'
+        ) {
+          ToastAndroid.show(
+            'Allow Permission to Continue',
+            ToastAndroid.LONG,
+            ToastAndroid.CENTER,
+          );
+        }
+      })
+      .catch(err => console.log(err));
   };
 
   return (
@@ -52,9 +135,9 @@ const editProfile = props => {
         <View style={styles.title}>
           <Text style={styles.texTitle}>Edit Profile</Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={imagePic}>
           <View style={styles.imgBox}>
-            <Image style={styles.img} source={{uri: user}} />
+            <Image style={styles.img} source={{uri: img}} />
           </View>
         </TouchableOpacity>
         <View style={styles.nameBox}>
