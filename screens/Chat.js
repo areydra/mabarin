@@ -45,7 +45,6 @@ class Chat extends Component {
 
   onSend = () => {
     if (this.state.text.length > 0) {
-      this.props.navigation.state.params.onLastMessage
       let msgId = firebase
         .database()
         .ref('messages')
