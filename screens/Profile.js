@@ -73,11 +73,20 @@ const Profile = props => {
               </View>
 
               <View style={styles.profileBox}>
-                <Text style={styles.name}>
-                  {name.length > 8 ? name.substr(0, 8) + '...' : name}
-                </Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text style={styles.name}>
+                    {name.length > 8 ? name.substr(0, 8) + '...' : name}
+                  </Text>
+                  <TouchableOpacity onPress={goEditProfile}>
+                    <Icon
+                      type="MaterialCommunityIcons"
+                      name="square-edit-outline"
+                      style={{color: 'white', fontSize: 20}}
+                    />
+                  </TouchableOpacity>
+                </View>
 
-                <Text style={styles.match}>0,62</Text>
+                <Text style={styles.match}>200 Match</Text>
               </View>
               <View style={styles.statusBox}>
                 {data.premium ? (
@@ -85,21 +94,14 @@ const Profile = props => {
                     <View style={styles.premiumBox}>
                       <Text style={styles.premium}>Premium</Text>
                     </View>
-                    <TouchableOpacity onPress={goEditProfile}>
-                      <View style={styles.editBox}>
-                        <Text style={styles.edit}>Edit Profile</Text>
-                      </View>
-                    </TouchableOpacity>
                   </>
                 ) : (
                   <>
-                    <View style={styles.premiumBoxOf}>
+                    <TouchableOpacity
+                      activeOpacity={0.9}
+                      style={styles.premiumBoxOf}
+                      onPress={() => props.navigation.navigate('BuyPremium')}>
                       <Text style={styles.premiumOf}>Basic</Text>
-                    </View>
-                    <TouchableOpacity onPress={goEditProfile}>
-                      <View style={styles.editBox}>
-                        <Text style={styles.edit}>Edit Profile</Text>
-                      </View>
                     </TouchableOpacity>
                   </>
                 )}
@@ -140,6 +142,7 @@ const Profile = props => {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: '#373737',
+    paddingHorizontal: 20,
   },
   textHeader: {
     color: 'white',
@@ -244,6 +247,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
     padding: 13,
+    fontWeight: '700',
   },
   historBox: {
     flexDirection: 'row',
