@@ -34,6 +34,8 @@ class Maps extends Component {
       isLoading: true,
       notification : [],
       person: [],
+      lastMessage: [],
+      run: 0,
       user: []
     };
   }
@@ -67,28 +69,42 @@ class Maps extends Component {
         this.setState({ user: user.val() })
       }
     })
+  };
+  getLastMessage = async() => {
+    const user = firebase.auth().currentUser;
+    const uid = user.uid
 
-    firebase.database().ref('users/' + Object.keys(this.state.user)).once('value', async (person) => {
-      this.setState({ person: person.val() })
-    })
-
-    firebase.database().ref('/messages/' + uid + '/' + Object.keys(this.state.user)).limitToLast(1).on('child_added', lastMessage => {
-      if(lastMessage.val()){
-        let messageUser = lastMessage.val()
-        let notification = [{
-          username: this.state.person.username,
-          message: messageUser.text,
-          createdAt: messageUser.createdAt,
-          from: messageUser.user._id,
-          personDetail: this.state.person
-        }]
-        if(!this.state.notification.length){
-          this.setState({ notification })
+    firebase.database().ref('messages/' + uid + '/' + Object.keys(this.state.user)).limitToLast(1).on('child_added', async(lastMessage) => {
+      if (lastMessage.val()) {
+        let run = this.state.run + 1
+        await this.setState({ run })
+        
+        if(this.state.run > 1){
+            let messageUser = lastMessage.val()
+            if (messageUser.user) {
+              if(uid !== messageUser.user._id){
+                this.getNotification(messageUser)
+              }
+            }
         }
       }
-    })
+    })    
+  }
 
-  };
+  getNotification = messageUser => {
+    firebase.database().ref('users/' + messageUser.user._id).once('value', async (person) => {
+      let notification = [{
+        person: messageUser.user._id,
+        message: messageUser.text,
+        createdAt: messageUser.createdAt,
+        from: messageUser.user.name,
+        personDetail: person.val()
+      }]
+      if (!this.state.notification.length) {
+        this.setState({ notification })
+      }
+    })
+  }
 
   usersLocation = () => {
     firebase
@@ -115,12 +131,10 @@ class Maps extends Component {
 
   sendNotification = async() => {
     if (this.state.notification.length) {
-      const user = firebase.auth().currentUser
-      const { username, message, from, personDetail } = this.state.notification[0]
+      const { message, from, personDetail } = this.state.notification[0]
 
-      if(user.uid !== from){
         PushNotification.localNotification({
-          title: "Message from " + username,
+          title: "Message from " + from,
           message: message,
           playSound: true
         })
@@ -130,7 +144,6 @@ class Maps extends Component {
           }
         })
         this.setState({ notification: [] })
-      }
     }
   }
 
@@ -178,7 +191,7 @@ class Maps extends Component {
                     onCalloutPress={() =>
                       item.id == userId
                         ? null
-                        : this.props.navigation.navigate('Chat', item)
+                        : this.props.navigation.navigate('Chat', { ...item, onLastMessage : this.getLastMessage()})
                     }
                     title={item.id == userId ? 'You' : item.username}
                     coordinate={{
