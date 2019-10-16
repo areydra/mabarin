@@ -36,6 +36,7 @@ class Maps extends Component {
       person: [],
       lastMessage: [],
       run: 0,
+      inChat: false,
       user: []
     };
   }
@@ -43,6 +44,7 @@ class Maps extends Component {
   componentDidMount = async () => {
     await this.usersLocation();
     const user = firebase.auth().currentUser;
+    let uid = user.uid
 
     await this.setState({ userId: user.uid });
 
@@ -62,48 +64,46 @@ class Maps extends Component {
         });
       this.changeRegion(Location, Location.latitude, Location.longitude);
     });
-    let uid = user.uid
     
     firebase.database().ref('/messages/' + uid).limitToLast(1).once('value', user => {
       if(user.val()){
         this.setState({ user: user.val() })
       }
     })
-  };
-  getLastMessage = async() => {
-    const user = firebase.auth().currentUser;
-    const uid = user.uid
 
-    firebase.database().ref('messages/' + uid + '/' + Object.keys(this.state.user)).limitToLast(1).on('child_added', async(lastMessage) => {
+    firebase.database().ref('messages/' + uid + '/' + Object.keys(this.state.user)).limitToLast(1).on('child_added', async (lastMessage) => {
       if (lastMessage.val()) {
-        let run = this.state.run + 1
-        await this.setState({ run })
-        
-        if(this.state.run > 1){
-            let messageUser = lastMessage.val()
-            if (messageUser.user) {
-              if(uid !== messageUser.user._id){
-                this.getNotification(messageUser)
-              }
-            }
+        let messageUser = lastMessage.val()
+        if (messageUser.user) {
+          if (uid !== messageUser.user._id) {
+            this.getNotification(messageUser)
+          }
         }
       }
     })    
-  }
+    this.setState({ run : 1 })
+
+    this.props.navigation.addListener('didFocus', () => this.setState({ inChat: false }))
+  };
 
   getNotification = messageUser => {
-    firebase.database().ref('users/' + messageUser.user._id).once('value', async (person) => {
-      let notification = [{
-        person: messageUser.user._id,
-        message: messageUser.text,
-        createdAt: messageUser.createdAt,
-        from: messageUser.user.name,
-        personDetail: person.val()
-      }]
-      if (!this.state.notification.length) {
-        this.setState({ notification })
-      }
-    })
+    if(this.state.run > 0 && !this.state.inChat){
+      firebase.database().ref('users/' + messageUser.user._id).once('value', async (person) => {
+        let notification = [{
+          person: messageUser.user._id,
+          message: messageUser.text,
+          createdAt: messageUser.createdAt,
+          from: messageUser.user.name,
+          personDetail: person.val()
+        }]
+        if (!this.state.notification.length) {
+          this.setState({ notification })
+        }
+      })
+    } else {
+      let run = this.state.run + 1
+      this.setState({ run })
+    }
   }
 
   usersLocation = () => {
@@ -130,8 +130,8 @@ class Maps extends Component {
   };
 
   sendNotification = async() => {
-    if (this.state.notification.length) {
-      const { message, from, personDetail } = this.state.notification[0]
+      if (this.state.notification.length) {
+        const { message, from, personDetail } = this.state.notification[0]
 
         PushNotification.localNotification({
           title: "Message from " + from,
@@ -140,11 +140,14 @@ class Maps extends Component {
         })
         PushNotification.configure({
           onNotification: notif => {
-            if (notif.userInteraction) this.props.navigation.navigate('Chat', personDetail)
+            if (notif.userInteraction){
+              this.setState({ inChat: true })
+              this.props.navigation.navigate('Chat', personDetail)
+            }
           }
         })
         this.setState({ notification: [] })
-    }
+      }
   }
 
   render() {
@@ -188,10 +191,12 @@ class Maps extends Component {
                 {matchUser.map((item, index) => (
                   <Marker
                     key={index}
-                    onCalloutPress={() =>
-                      item.id == userId
-                        ? null
-                        : this.props.navigation.navigate('Chat', { ...item, onLastMessage : this.getLastMessage()})
+                    onCalloutPress={async() => {
+                      if (item.id !== userId){
+                        await this.setState({ inChat: true })
+                        this.props.navigation.navigate('Chat', item)
+                      }
+                    }
                     }
                     title={item.id == userId ? 'You' : item.username}
                     coordinate={{
