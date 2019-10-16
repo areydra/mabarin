@@ -37,18 +37,11 @@ const More = props => {
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.8}>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('BuyPremium')}
+            activeOpacity={0.8}>
             <View style={styles.menu}>
-              <Text style={styles.menuText}>Profile</Text>
-              <Image
-                source={require('../assets/icons/right-arrow.png')}
-                style={styles.menuIcon}
-              />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.8}>
-            <View style={styles.menu}>
-              <Text style={styles.menuText}>Settings</Text>
+              <Text style={styles.menuText}>Buy Premium</Text>
               <Image
                 source={require('../assets/icons/right-arrow.png')}
                 style={styles.menuIcon}

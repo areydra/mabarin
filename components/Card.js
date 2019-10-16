@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, Image, View, StyleSheet} from 'react-native';
+import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {Icon} from 'native-base';
 import Moment from 'moment';
@@ -12,24 +12,40 @@ const Card = props => {
         <Image source={{uri: props.data.image}} style={styles.img} />
       </View>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{props.data.game}</Text>
-        <Text style={styles.titlePerson}>
-          <Icon
-            type="AntDesign"
-            name="user"
-            style={{color: 'white', fontSize: 14}}
-          />
-          &nbsp; Playing with {props.data.uidfriend}
-        </Text>
-        <Text style={styles.titleDate}>
-          {Moment(props.data.date).format('D MMM, YYYY, h:mm:ss a')}
-        </Text>
+        <View style={styles.content}>
+          <Text style={styles.title}>{props.data.game}</Text>
+          <Text style={styles.titlePerson}>
+            <Icon
+              type="AntDesign"
+              name="user"
+              style={{color: 'white', fontSize: 14}}
+            />
+            &nbsp; Playing with {props.data.uidfriend}
+          </Text>
+          <Text style={styles.titleDate}>
+            {Moment(props.data.date).format('D MMM, YYYY, h:mm:ss a')}
+          </Text>
+        </View>
+        <View>
+          <TouchableOpacity activeOpacity={0.8} style={styles.buttonDone}>
+            <Text style={{color: 'red'}}>SELESAI</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonDone: {
+    borderWidth: 1,
+    borderColor: 'red',
+    padding: 5,
+    borderRadius: 3,
+  },
+  content: {
+    flex: 1,
+  },
   img: {
     resizeMode: 'cover',
     flex: 1,
@@ -51,6 +67,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderBottomWidth: 1,
     borderBottomColor: 'grey',
+    flexDirection: 'row',
   },
   title: {
     color: 'white',
