@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 import {Header, Left, Right, Body, Icon} from 'native-base';
 import firebase from 'firebase';
+import Card from '../components/Card';
+import {connect} from 'react-redux';
+import {getUser} from '../redux/action/user';
 
 const {width, height} = Dimensions.get('window');
 
@@ -20,12 +23,12 @@ const Profile = props => {
   const [username, setUserName] = useState('');
 
   useEffect(() => {
-    getUser();
+    getUsers();
   }, []);
 
-  const getUser = () => {
+  const getUsers = () => {
     const user = firebase.auth().currentUser;
-    console.log(user.uid);
+    props.dispatch(getUser(user.uid));
     firebase
       .database()
       .ref(`users/${user.uid}`)
@@ -118,8 +121,13 @@ const Profile = props => {
           )}
         </View>
         <Text style={styles.open}>Mabar History</Text>
-        <View style={styles.historBox}>
-          <View style={styles.historyImgBox}>
+        {props.userData.length === 0
+          ? null
+          : props.userData.mabarhistory.map((item, index) => {
+              return <Card key={index} data={item} />;
+            })}
+        {/* <View style={styles.historBox}> */}
+        {/* <View style={styles.historyImgBox}>
             <Image
               style={styles.historyImg}
               source={{
@@ -132,8 +140,8 @@ const Profile = props => {
             <Text style={styles.nameGame}>CEODE</Text>
             <Text style={styles.playWith}>Play With Kunti</Text>
             <Text style={styles.status}>Never Stop</Text>
-          </View>
-        </View>
+          </View> */}
+        {/* </View> */}
       </View>
     </Fragment>
   );
@@ -283,5 +291,9 @@ const styles = StyleSheet.create({
     color: '#b5b5b5',
   },
 });
-
-export default Profile;
+const mapStateToProps = state => {
+  return {
+    userData: state.user.currentUser,
+  };
+};
+export default connect(mapStateToProps)(Profile);
