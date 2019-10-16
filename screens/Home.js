@@ -10,19 +10,15 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import firebase from 'firebase';
-import PushNotification from 'react-native-push-notification';
 
-import ML from '../assets/image/ML.jpg';
-import AOV from '../assets/image/AOV.jpg';
-import PUBG from '../assets/image/PUBG.jpg';
-import VG from '../assets/image/VG.jpg';
-import TE from '../assets/image/TE.jpg';
-import eventOne from '../assets/image/eventOne.jpg';
-import eventTwo from '../assets/image/eventTwo.jpg';
+import {connect} from 'react-redux';
+import {getGameList} from '../redux/action/gameList';
+import {getEventList} from '../redux/action/eventList';
 
 const {width, height} = Dimensions.get('window');
 const Home = props => {
   const [data, setData] = useState('');
+
   const user = firebase.auth().currentUser;
 
   const goProfile = () => {
@@ -32,8 +28,10 @@ const Home = props => {
     props.navigation.navigate('Events');
   };
 
-  const getUser = async () => {
+  const getData = async () => {
     const user = firebase.auth().currentUser;
+    await props.dispatch(getGameList());
+    await props.dispatch(getEventList());
 
     await firebase
       .database()
@@ -48,6 +46,19 @@ const Home = props => {
       });
   };
 
+  const goMaps = (match, id) => {
+    firebase
+      .database()
+      .ref(`users/${data.id}`)
+      .update({matching: id})
+      .then(() => {
+        props.navigation.navigate('Maps', {
+          match: id,
+          matchName: match,
+        });
+      });
+  };
+
   const setMatching = () => {
     props.navigation.addListener('didFocus', () => {
       firebase
@@ -58,7 +69,7 @@ const Home = props => {
   };
 
   useEffect(() => {
-    getUser();
+    getData();
     setMatching();
   }, []);
 
@@ -110,144 +121,59 @@ const Home = props => {
               )}
             </View>
           </TouchableOpacity>
-          <Text style={styles.eventText}>Coming Soon Event</Text>
-          <View>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              <TouchableOpacity onPress={goEvent}>
-                <View style={styles.eventBox}>
-                  <Image style={styles.eventImg} source={eventOne} />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={goEvent}>
-                <View style={styles.eventBox}>
-                  <Image style={styles.eventImg} source={eventTwo} />
-                </View>
-              </TouchableOpacity>
-            </ScrollView>
-          </View>
-          <Text style={styles.textMabar}>
-            Mabar Now!
-            <Text style={styles.subTit}>&nbsp;&nbsp;Find Your Crew</Text>
-          </Text>
+          {props.eventList.length > 0 && props.gameList.length > 0 ? (
+            <>
+              <Text style={styles.eventText}>Coming Soon Event</Text>
+              <View>
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}>
+                  {props.eventList.map((data, index) => {
+                    return (
+                      <TouchableOpacity onPress={goEvent}>
+                        <View key={index} style={styles.eventBox}>
+                          <Image
+                            style={styles.eventImg}
+                            source={{uri: data.image}}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+              <Text style={styles.textMabar}>
+                Mabar Now!
+                <Text style={styles.subTit}>&nbsp;&nbsp;Find Your Crew</Text>
+              </Text>
 
-          <View
-            style={{
-              alignItems: 'center',
-              flex: 1,
-            }}>
-            <View style={styles.game}>
-              <TouchableOpacity
-                onPress={() =>
-                  firebase
-                    .database()
-                    .ref('users/' + user.uid)
-                    .update({matching: 'ML'})
-                    .then(() => {
-                      props.navigation.navigate('Maps', {
-                        match: 'ML',
-                        matchName: 'Mobile Legends',
-                      });
-                    })
-                }>
-                <View style={styles.gameImgBox}>
-                  <Image style={styles.gameImg} source={ML} />
+              <View style={styles.asing}>
+                <View style={styles.game}>
+                  {props.gameList.map((data, index) => {
+                    return (
+                      <TouchableOpacity
+                        onPress={() => goMaps(data.name, data._id)}>
+                        <View key={index} style={styles.gameImgBox}>
+                          <Image
+                            style={styles.gameImg}
+                            source={{uri: data.image}}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
                 </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  firebase
-                    .database()
-                    .ref('users/' + user.uid)
-                    .update({matching: 'COD'})
-                    .then(() => {
-                      props.navigation.navigate('Maps', {
-                        match: 'COD',
-                        matchName: 'Call Of Duty',
-                      });
-                    })
-                }>
-                <View style={styles.gameImgBox}>
-                  <Image
-                    style={styles.gameImg}
-                    source={{
-                      uri:
-                        'https://upload.wikimedia.org/wikipedia/en/0/07/CODM_logo.png',
-                    }}
-                  />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  firebase
-                    .database()
-                    .ref('users/' + user.uid)
-                    .update({matching: 'AOV'})
-                    .then(() => {
-                      props.navigation.navigate('Maps', {
-                        match: 'AOV',
-                        matchName: 'Arena Of Valor',
-                      });
-                    })
-                }>
-                <View style={styles.gameImgBox}>
-                  <Image style={styles.gameImg} source={AOV} />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  firebase
-                    .database()
-                    .ref('users/' + user.uid)
-                    .update({matching: 'PUBG'})
-                    .then(() => {
-                      props.navigation.navigate('Maps', {
-                        match: 'PUBG',
-                        matchName: 'PUBG',
-                      });
-                    })
-                }>
-                <View style={styles.gameImgBox}>
-                  <Image style={styles.gameImg} source={PUBG} />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  firebase
-                    .database()
-                    .ref('users/' + user.uid)
-                    .update({matching: 'VG'})
-                    .then(() => {
-                      props.navigation.navigate('Maps', {
-                        match: 'VG',
-                        matchName: 'Vain Glory',
-                      });
-                    })
-                }>
-                <View style={styles.gameImgBox}>
-                  <Image style={styles.gameImg} source={VG} />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  firebase
-                    .database()
-                    .ref('users/' + user.uid)
-                    .update({matching: 'TE'})
-                    .then(() => {
-                      props.navigation.navigate('Maps', {
-                        match: 'TE',
-                        matchName: 'Tetris',
-                      });
-                    })
-                }>
-                <View style={styles.gameImgBox}>
-                  <Image style={styles.gameImg} source={TE} />
-                </View>
-              </TouchableOpacity>
+              </View>
+            </>
+          ) : (
+            <View style={styles.loadingBox2}>
+              <ActivityIndicator
+                color="#006aeb"
+                size="large"
+                style={styles.loading2}
+              />
             </View>
-          </View>
+          )}
         </ScrollView>
       </View>
     </Fragment>
@@ -269,6 +195,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loading: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingBox2: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: height / 1.34,
+  },
+  loading2: {
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -387,6 +322,17 @@ const styles = StyleSheet.create({
 
     resizeMode: 'cover',
   },
+  asing: {
+    alignItems: 'center',
+    flex: 1,
+  },
 });
 
-export default Home;
+const mapStateToProps = state => {
+  return {
+    gameList: state.gameList.gameList,
+    eventList: state.eventList.eventList,
+  };
+};
+
+export default connect(mapStateToProps)(Home);

@@ -9,7 +9,6 @@ import {
   Dimensions,
   PermissionsAndroid,
   ToastAndroid,
-  Alert,
 } from 'react-native';
 import {Header, Left, Right, Body, Icon} from 'native-base';
 import firebase from 'firebase';
@@ -46,7 +45,7 @@ const editProfile = props => {
   const onSave = async () => {
     const user = firebase.auth().currentUser.uid;
     if (userName.length < 3) {
-      Alert.alert('min Lenght 3');
+      ToastAndroid.show('Min Lenght 3', ToastAndroid.LONG, ToastAndroid.CENTER);
     } else {
       await firebase
         .database()
@@ -98,8 +97,6 @@ const editProfile = props => {
                 return imageRef.getDownloadURL();
               })
               .then(async url => {
-                console.log(url);
-
                 firebase
                   .database()
                   .ref(`users/${user}`)
