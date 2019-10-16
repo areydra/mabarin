@@ -29,7 +29,11 @@ const Login = props => {
     const validEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/gim;
     let checkEmail = email.match(validEmail);
     if (checkEmail == null) {
-      Alert.alert('Email Invalid');
+      ToastAndroid.show(
+        'Email Invalid',
+        ToastAndroid.LONG,
+        ToastAndroid.CENTER,
+      );
     } else {
       setLoading(true);
       await firebase

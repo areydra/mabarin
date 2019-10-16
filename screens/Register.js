@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import firebase from 'firebase';
 import {validate} from '@babel/types';
@@ -32,16 +33,32 @@ const Register = props => {
     setLoading(true);
     if (checkEmail === null) {
       setLoading(false);
-      Alert.alert('Email Invalid');
+      ToastAndroid.show(
+        'Email Invalid',
+        ToastAndroid.LONG,
+        ToastAndroid.CENTER,
+      );
     } else if (checkPassword === null) {
       setLoading(false);
-      Alert.alert('Password must have alphabet and number, min length 8');
+      ToastAndroid.show(
+        'Password must have alphabet and number, min length 8',
+        ToastAndroid.LONG,
+        ToastAndroid.CENTER,
+      );
     } else if (username.length < 3) {
       setLoading(false);
-      Alert.alert('please input Name more than 3');
+      ToastAndroid.show(
+        'Please input Name more than 3',
+        ToastAndroid.LONG,
+        ToastAndroid.CENTER,
+      );
     } else if (password !== rePassword) {
       setLoading(false);
-      Alert.alert('Password and RePassword does not match');
+      ToastAndroid.show(
+        'Password and RePassword does not match',
+        ToastAndroid.LONG,
+        ToastAndroid.CENTER,
+      );
     } else {
       await firebase
         .auth()
@@ -72,6 +89,7 @@ const Register = props => {
             });
         });
       props.navigation.navigate('Home');
+      ToastAndroid.show("Let's Play", ToastAndroid.LONG, ToastAndroid.CENTER);
     }
   };
 
