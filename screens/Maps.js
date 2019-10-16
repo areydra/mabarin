@@ -65,26 +65,35 @@ class Maps extends Component {
       this.changeRegion(Location, Location.latitude, Location.longitude);
     });
     
-    firebase.database().ref('/messages/' + uid).limitToLast(1).once('value', user => {
+    firebase.database().ref('messages/').child(uid).on('child_changed', async(user) => {
       if(user.val()){
-        this.setState({ user: user.val() })
+        this.getMessage(user.key)
       }
     })
 
-    firebase.database().ref('messages/' + uid + '/' + Object.keys(this.state.user)).limitToLast(1).on('child_added', async (lastMessage) => {
+    firebase.database().ref('messages/').child(uid).limitToLast(1).on('child_added', async(user) => {
+      if(user.val()){
+        this.getMessage(user.key)
+      }
+    })
+
+    this.props.navigation.addListener('didFocus', () => this.setState({ inChat: false }))
+  };
+
+  getMessage = personUid => {
+    let user = firebase.auth().currentUser
+
+    firebase.database().ref('messages/' + user.uid + '/' + personUid).limitToLast(1).on('child_added', async (lastMessage) => {
       if (lastMessage.val()) {
         let messageUser = lastMessage.val()
         if (messageUser.user) {
-          if (uid !== messageUser.user._id) {
+          if (user.uid !== messageUser.user._id) {
             this.getNotification(messageUser)
           }
         }
       }
     })    
-    this.setState({ run : 1 })
-
-    this.props.navigation.addListener('didFocus', () => this.setState({ inChat: false }))
-  };
+  }
 
   getNotification = messageUser => {
     if(this.state.run > 0 && !this.state.inChat){
@@ -100,6 +109,7 @@ class Maps extends Component {
           this.setState({ notification })
         }
       })
+      this.sendNotification()
     } else {
       let run = this.state.run + 1
       this.setState({ run })
@@ -151,7 +161,7 @@ class Maps extends Component {
   }
 
   render() {
-    this.sendNotification()
+    // this.sendNotification()
 
     const { userId } = this.state;
     const matchUser = this.state.users.filter(
