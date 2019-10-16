@@ -98,6 +98,8 @@ const editProfile = props => {
                 return imageRef.getDownloadURL();
               })
               .then(async url => {
+                console.log(url);
+
                 firebase
                   .database()
                   .ref(`users/${user}`)
