@@ -190,7 +190,7 @@ class Chat extends Component {
                 </View>
                 <View style={styles.butJoin}>
                   <TouchableOpacity
-                    onPress={() => this.acceptInvite}
+                    onPress={() => this.acceptInvite()}
                     activeOpacity={0.8}
                     style={styles.butAccept}>
                     <Text
@@ -228,14 +228,16 @@ class Chat extends Component {
               <Text style={{color: 'white'}}>{friendData.status}</Text>
             </View>
           </View>
-          <View style={styles.but}>
-            <TouchableOpacity
-              onPress={() => this.invite()}
-              activeOpacity={0.8}
-              style={styles.button}>
-              <Text style={{fontSize: 18, color: '#00c91e'}}>Invite</Text>
-            </TouchableOpacity>
-          </View>
+          {this.state.statusMatch !== 'inMatch' ? (
+            <View style={styles.but}>
+              <TouchableOpacity
+                onPress={() => this.invite()}
+                activeOpacity={0.8}
+                style={styles.button}>
+                <Text style={{fontSize: 18, color: '#00c91e'}}>Invite</Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </View>
         <View style={{backgroundColor: '#232323', flex: 1}}>
           <GiftedChat
