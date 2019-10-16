@@ -24,17 +24,22 @@ const {width, height} = Dimensions.get('window');
 const Home = props => {
   const [data, setData] = useState('');
   const user = firebase.auth().currentUser;
+
   const goProfile = () => {
     props.navigation.navigate('Profile');
+  };
+  const goEvent = () => {
+    props.navigation.navigate('Events');
   };
 
   const getUser = async () => {
     const user = firebase.auth().currentUser;
+
     await firebase
       .database()
       .ref(`users/${user.uid}`)
-      .once('value')
-      .then(result => {
+
+      .on('value', result => {
         let data = result.val();
 
         if (data !== null) {
@@ -110,12 +115,16 @@ const Home = props => {
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
-              <View style={styles.eventBox}>
-                <Image style={styles.eventImg} source={eventOne} />
-              </View>
-              <View style={styles.eventBox}>
-                <Image style={styles.eventImg} source={eventTwo} />
-              </View>
+              <TouchableOpacity onPress={goEvent}>
+                <View style={styles.eventBox}>
+                  <Image style={styles.eventImg} source={eventOne} />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={goEvent}>
+                <View style={styles.eventBox}>
+                  <Image style={styles.eventImg} source={eventTwo} />
+                </View>
+              </TouchableOpacity>
             </ScrollView>
           </View>
           <Text style={styles.textMabar}>

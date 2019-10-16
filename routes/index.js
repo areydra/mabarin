@@ -17,6 +17,7 @@ import {
   Profile,
   Register,
   SplashScreen,
+  EditProfile,
 } from '../screens';
 
 import {Dimensions} from 'react-native';
@@ -30,6 +31,7 @@ const HomeStack = createStackNavigator(
     Maps,
     Chat,
     Profile,
+    EditProfile,
   },
   {
     initialRouteName: 'Home',
