@@ -1,18 +1,37 @@
 import React from 'react';
-import Router from './routes'
-import firebase from 'firebase'
+import Router from './routes';
+import firebase from 'firebase';
 
-import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from './key'
+import {Provider} from 'react-redux';
+import store from './redux/store';
 
-firebaseConfig  = {
-  apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId
-}
+import {
+  apiKey,
+  authDomain,
+  databaseURL,
+  projectId,
+  storageBucket,
+  messagingSenderId,
+  appId,
+} from './key';
 
-firebase.initializeApp(firebaseConfig)
+firebaseConfig = {
+  apiKey,
+  authDomain,
+  databaseURL,
+  projectId,
+  storageBucket,
+  messagingSenderId,
+  appId,
+};
+
+firebase.initializeApp(firebaseConfig);
 
 const App = () => {
   return (
-    <Router />
+    <Provider store={store}>
+      <Router />
+    </Provider>
   );
 };
 

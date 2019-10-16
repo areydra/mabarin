@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,23 +9,43 @@ import {
 } from 'react-native';
 
 import Card from '../components/Card';
+import {connect} from 'react-redux';
+import {getUser} from '../redux/action/user';
+import firebase from 'firebase';
 
-const MabarHistory = () => {
-  return (
-    <SafeAreaView style={styles.mabarHistoryContainer}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Mabar History</Text>
-      </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <Card />
-          <Card />
-          <Card />
+class MabarHistory extends Component {
+  constructor() {
+    super();
+    this.state = {
+      userHistory: [],
+    };
+  }
+
+  componentDidMount = async () => {
+    const user = firebase.auth().currentUser;
+
+    await this.props.dispatch(getUser(user.uid));
+  };
+
+  render() {
+    return (
+      <SafeAreaView style={styles.mabarHistoryContainer}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Mabar History</Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.container}>
+            {this.props.userData.length === 0
+              ? null
+              : this.props.userData.mabarhistory.map((item, index) => {
+                  return <Card key={index} data={item} />;
+                })}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   mabarHistoryContainer: {
@@ -52,4 +72,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MabarHistory;
+const mapStateToProps = state => {
+  return {
+    userData: state.user.currentUser,
+  };
+};
+
+export default connect(mapStateToProps)(MabarHistory);

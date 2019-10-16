@@ -28,7 +28,6 @@ const Login = props => {
   const onLogin = async () => {
     const validEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/gim;
     let checkEmail = email.match(validEmail);
-    console.log('validasi', checkEmail);
     if (checkEmail == null) {
       Alert.alert('Email Invalid');
     } else {
