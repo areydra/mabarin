@@ -22,7 +22,7 @@ export const sendRatingFriend = (uid, data) => {
   return {
     type: 'POST_RATING',
     payload: Axios.patch(
-      `http://localhost:6969/api/users/addrating/${uid}`,
+      `http://18.141.12.25:6969/api/users/addrating/${uid}`,
       data,
     ),
   };
