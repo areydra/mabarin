@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import firebase from 'firebase';
 import {validate} from '@babel/types';
+import { postUser } from '../redux/action/user'
+import { connect } from 'react-redux'
 
 const {width, height} = Dimensions.get('window');
 
@@ -63,8 +65,9 @@ const Register = props => {
       await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(({user}) => {
+        .then(async({user}) => {
           setLoading(false);
+          await props.dispatch(postUser({ uid: user.uid, email: user.email, username: username }))
 
           firebase.auth().currentUser.updateProfile({
             displayName: username,
@@ -210,4 +213,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Register;
+export default connect()(Register);

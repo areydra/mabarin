@@ -159,12 +159,9 @@ class Chat extends Component {
   }
 
   acceptInvite = async () => {
-    let matchData = {
-      senderId: this.state.user.uid,
-      senderName: this.state.user.displayName,
-      createdAt: new Date(),
-      statusMatch: 'Invited',
-    };
+    await this.props.dispatch(this.state.user.id, { game: this.state.user.matching, friendUid: this.state.friendData.uid })
+    await this.props.dispatch(this.state.friendData.id, { game: this.state.friendData.matching, friendUid: this.state.user.uid })
+
     await firebase
       .database()
       .ref('users/' + this.state.friendData.id)
