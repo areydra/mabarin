@@ -114,6 +114,7 @@ class Chat extends Component {
         ToastAndroid.CENTER,
       );
     }
+    this.setState({ statusMatch: 'inMatch' });
   };
 
   renderSend(props) {
@@ -156,19 +157,21 @@ class Chat extends Component {
   }
 
   acceptInvite = async () => {
-    await this.props.dispatch(this.state.user.id, { game: this.state.user.matching, friendUid: this.state.friendData.uid, name: this.state.friendData.username })
-    await this.props.dispatch(this.state.friendData.id, { game: this.state.friendData.matching, friendUid: this.state.user.uid, name: this.state.user.username })
+    console.log('user', this.state.user)
+    console.log('friend data', this.state.friendData)
+    // await this.props.dispatch(this.state.user.id, { game: this.state.user.matching, friendUid: this.state.friendData.uid, name: this.state.friendData.username })
+    // await this.props.dispatch(this.state.friendData.id, { game: this.state.friendData.matching, friendUid: this.state.user.uid, name: this.state.user.username })
 
-    await firebase
-      .database()
-      .ref('users/' + this.state.friendData.id)
-      .update({statusMatch: 'inMatch'});
+    // await firebase
+    //   .database()
+    //   .ref('users/' + this.state.friendData.id)
+    //   .update({statusMatch: 'inMatch'});
 
-    await firebase
-      .database()
-      .ref('users/' + this.state.user.uid)
-      .update({statusMatch: 'inMatch'});
-    this.setState({statusMatch: 'inMatch'});
+    // await firebase
+    //   .database()
+    //   .ref('users/' + this.state.user.uid)
+    //   .update({statusMatch: 'inMatch'});
+    // this.setState({statusMatch: null});
   };
 
   declineInvite = () => {
