@@ -39,6 +39,7 @@ const editProfile = props => {
       .on('value', datas => {
         let data = datas.val();
         setImg(data.photo);
+        setUserName(data.username);
       });
   };
 
@@ -141,6 +142,7 @@ const editProfile = props => {
         </TouchableOpacity>
         <View style={styles.nameBox}>
           <TextInput
+            defaultValue={userName}
             placeholder="UserName"
             placeholderTextColor="white"
             style={styles.input}
