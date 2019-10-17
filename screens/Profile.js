@@ -22,6 +22,7 @@ const Profile = props => {
   const [data, setData] = useState('');
   const [img, setImg] = useState('');
   const [username, setUserName] = useState('');
+  const [match, setMatch] = useState('');
 
   useEffect(() => {
     getUsers();
@@ -39,6 +40,7 @@ const Profile = props => {
         setImg(data.photo);
         setData(data);
         setUserName(data.username);
+        setMatch(data.mabarhistory);
       });
   };
   const name = username;
@@ -86,7 +88,7 @@ const Profile = props => {
                   </TouchableOpacity>
                 </View>
 
-                <Text style={styles.match}>200 Match</Text>
+                <Text style={styles.match}>{match.length} Match</Text>
               </View>
               <View style={styles.statusBox}>
                 {data.premium ? (
