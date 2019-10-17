@@ -4,7 +4,7 @@ export const getUser = uid => {
   return {
     type: 'GET_USER',
     payload: Axios.get(
-      `http://18.141.12.25:6969/api/users/uid/${uid}`,
+      `http://18.141.12.25:6969/api/users/uid/pwdj337j3k3bj3b3rkrr`,
     ),
   };
 };
@@ -21,6 +21,14 @@ export const sendHistory = (uid, data) => {
     type: 'PATCH_HISTORY',
     payload: Axios.patch(
       `http://18.141.12.25:6969/api/users/uid/${uid}`, data
+    ),
+  };
+};
+export const sendRatingFriend = (uid, data) => {
+  return {
+    type: 'POST_RATING',
+    payload: Axios.patch(
+      `http://localhost:6969/api/users/addrating/${uid}`, data
     ),
   };
 };

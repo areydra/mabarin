@@ -67,8 +67,6 @@ const Register = props => {
         .createUserWithEmailAndPassword(email, password)
         .then(async({user}) => {
           setLoading(false);
-          await props.dispatch(postUser({ uid: user.uid, email: user.email, username: username }))
-
           firebase.auth().currentUser.updateProfile({
             displayName: username,
             photoURL:
@@ -90,6 +88,7 @@ const Register = props => {
                 longitude: 0,
               },
             });
+          await props.dispatch(postUser({ uid: user.uid, email: user.email, username: username }))
         });
       props.navigation.navigate('Home');
       ToastAndroid.show("Let's Play", ToastAndroid.LONG, ToastAndroid.CENTER);
