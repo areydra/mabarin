@@ -25,8 +25,12 @@ firebaseConfig = {
   appId,
 };
 
-firebase.initializeApp(firebaseConfig);
-
+// Initialize Firebase
+if (!firebase.apps.length) { //check if not initialize
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app()
+}
 const App = () => {
   return (
     <Provider store={store}>

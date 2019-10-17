@@ -24,7 +24,7 @@ class Chat extends Component {
       friendData: {},
       user: {},
       text: '',
-      statusMatch: '',
+      statusMatch: ''
     };
   }
 
@@ -58,7 +58,6 @@ class Chat extends Component {
 
   onSend = () => {
     if (this.state.text.length > 0) {
-      console.log(this.props.navigation);
       this.props.navigation.state.params.onResetRunNotif;
       let msgId = firebase
         .database()
@@ -103,13 +102,11 @@ class Chat extends Component {
 
   invite = () => {
     if (this.state.user.statusMatch !== 'Invited') {
-      console.log('Asdqweqwe');
       firebase
         .database()
         .ref('users/' + this.state.friendData.id)
         .update({statusMatch: 'invited'});
     } else {
-      console.log('Awokwkowko');
 
       ToastAndroid.show(
         'Udah ada yang punya kak',
@@ -159,8 +156,8 @@ class Chat extends Component {
   }
 
   acceptInvite = async () => {
-    await this.props.dispatch(this.state.user.id, { game: this.state.user.matching, friendUid: this.state.friendData.uid })
-    await this.props.dispatch(this.state.friendData.id, { game: this.state.friendData.matching, friendUid: this.state.user.uid })
+    await this.props.dispatch(this.state.user.id, { game: this.state.user.matching, friendUid: this.state.friendData.uid, name: this.state.friendData.username })
+    await this.props.dispatch(this.state.friendData.id, { game: this.state.friendData.matching, friendUid: this.state.user.uid, name: this.state.user.username })
 
     await firebase
       .database()
@@ -184,7 +181,6 @@ class Chat extends Component {
 
   render() {
     const {friendData} = this.state;
-    console.log('state StatusMatch', this.state.statusMatch);
     return (
       <Fragment>
         {/* Overlay Notif */

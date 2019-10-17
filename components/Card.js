@@ -1,10 +1,29 @@
-import React from 'react';
-import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {Text, Alert, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {Icon} from 'native-base';
 import Moment from 'moment';
+import firebase from 'firebase'
+import { connect } from 'react-redux';
+
+import { sendRatingFriend } from '../redux/action/user'
 
 const Card = props => {
+  const [rating, setRating] = useState(0)
+
+  const sendRating = async() => {
+    if(!rating){
+      return Alert.alert(
+        'Failed', //title
+        'You must be add rating', //message or description
+        //button dengan text: '', lalu style:'', onPress: ketika di pencet/klik jalankan function reset
+        [{ text: 'Ok', style: 'destructive' }]
+      );
+    }
+
+    let user = firebase.auth().currentUser
+    await props.dispatch(sendRatingFriend(user.uid,{rating: rating, friendUid: props.data.friendUid, date: props.data.date}))
+  }
   Moment.locale('en');
   return (
     <View style={styles.card}>
@@ -20,14 +39,14 @@ const Card = props => {
               name="user"
               style={{color: 'white', fontSize: 14}}
             />
-            &nbsp; Playing with {props.data.namefriend}
+            &nbsp; Playing with {props.data.name}
           </Text>
           <Text style={styles.titleDate}>
             {Moment(props.data.date).format('D MMM, YYYY, h:mm:ss a')}
           </Text>
         </View>
         <View>
-          <TouchableOpacity activeOpacity={0.8} style={styles.buttonDone}>
+          <TouchableOpacity activeOpacity={0.8} style={styles.buttonDone} onPress={sendRating}>
             <Text style={{color: 'red'}}>SELESAI</Text>
           </TouchableOpacity>
         </View>
@@ -87,4 +106,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Card;
+export default connect()(Card);
