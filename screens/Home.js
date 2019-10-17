@@ -105,7 +105,9 @@ const Home = props => {
                       {name.length > 8 ? name.substr(0, 8) + '...' : name}
                     </Text>
 
-                    <Text style={styles.match}>200 Match</Text>
+                    <Text style={styles.match}>
+                      {data.mabarhistory.length} Match
+                    </Text>
                   </View>
                   <View style={styles.statusBox}>
                     {data.premium ? (
