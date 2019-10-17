@@ -57,7 +57,7 @@ const Home = props => {
     firebase
       .database()
       .ref(`users/${data.id}`)
-      .update({matching: id})
+      .update({matching: id, game: match})
       .then(() => {
         props.navigation.navigate('Maps', {
           match: id,
@@ -71,7 +71,7 @@ const Home = props => {
       firebase
         .database()
         .ref('users/' + user.uid)
-        .update({matching: null});
+        .update({matching: null, game: null});
     });
   };
 
