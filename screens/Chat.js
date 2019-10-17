@@ -7,6 +7,7 @@ import {
   View,
   Image,
   ToastAndroid,
+  TouchableHightLight,
 } from 'react-native';
 import {GiftedChat, Bubble, InputToolbar, Send} from 'react-native-gifted-chat';
 import {Icon} from 'native-base';
@@ -255,7 +256,12 @@ class Chat extends Component {
             />
           </TouchableOpacity>
 
-          <View style={styles.headSub}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.headSub}
+            onPress={() =>
+              this.props.navigation.navigate('FriendsProfile', friendData)
+            }>
             <View style={styles.img}>
               <Image source={{uri: friendData.photo}} style={styles.image} />
             </View>
@@ -265,7 +271,7 @@ class Chat extends Component {
               </Text>
               <Text style={{color: 'white'}}>{friendData.status}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
           {this.state.statusMatch !== 'inMatch' ? (
             <View style={styles.but}>
               <TouchableOpacity

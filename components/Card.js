@@ -39,13 +39,6 @@ const Card = props => {
       .database()
       .ref('users/' + user.uid)
       .update({statusMatch: null});
-
-    console.log({
-      uid: user.uid,
-      rating: rating,
-      friendUid: props.data.friendUid,
-      date: props.data.date,
-    });
   };
   Moment.locale('en');
   return (
