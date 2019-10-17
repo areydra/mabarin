@@ -88,10 +88,11 @@ const Register = props => {
                 longitude: 0,
               },
             });
-          await props.dispatch(postUser({ uid: user.uid, email: user.email, username: username }))
+          props.dispatch(postUser({ uid: user.uid, email: user.email, username: username })).then(() => {
+            props.navigation.navigate('Home');
+            ToastAndroid.show("Let's Play", ToastAndroid.LONG, ToastAndroid.CENTER);
+          })
         });
-      props.navigation.navigate('Home');
-      ToastAndroid.show("Let's Play", ToastAndroid.LONG, ToastAndroid.CENTER);
     }
   };
 
