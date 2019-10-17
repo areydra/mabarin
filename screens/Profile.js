@@ -52,17 +52,13 @@ const Profile = props => {
 
   return (
     <Fragment>
-      <Header androidStatusBarColor="gray" style={styles.header}>
-        <Left>
-          <TouchableOpacity onPress={goHome}>
-            <Icon type="AntDesign" name="left" style={styles.icon} />
-          </TouchableOpacity>
-        </Left>
-        <Body>
-          <Text style={styles.textHeader}>Profile</Text>
-        </Body>
-        <Right></Right>
-      </Header>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={goHome}>
+          <Icon type="AntDesign" name="left" style={styles.icon} />
+        </TouchableOpacity>
+
+        <Text style={styles.textHeader}>Profile</Text>
+      </View>
       <View style={styles.container}>
         <View style={styles.userProfile}>
           {data ? (
@@ -138,10 +134,16 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#373737',
     paddingHorizontal: 20,
+    width: '100%',
+    height: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   textHeader: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 20,
+    marginLeft: 20,
+    fontWeight: '700',
   },
   loadingBox: {
     justifyContent: 'center',
@@ -154,7 +156,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 18,
   },
   container: {
     flex: 1,

@@ -10,16 +10,19 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import {Icon} from 'native-base';
+
 const {width} = Dimensions.get('window');
 
-const Events = () => {
+const Events = props => {
   return (
     <SafeAreaView style={styles.eventsContainer}>
       <View style={styles.header}>
-        <Image
-          source={require('../assets/icons/left-arrow.png')}
-          style={styles.icon}
-        />
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => props.navigation.goBack()}>
+          <Icon type="AntDesign" name="left" style={styles.icon} />
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>Event</Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -30,7 +33,7 @@ const Events = () => {
           />
           <View style={styles.titleContainer}>
             <Text style={styles.title}>Tournament Mobile Legends</Text>
-            <Text style={styles.titleDate}>Moscow, 11 November</Text>
+            <Text style={styles.titleDate}>Indonesia, 11 November</Text>
           </View>
           <View style={styles.prizeContainer}>
             <Text style={styles.textPrize}>Prize</Text>
@@ -80,15 +83,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#1C1C1C',
   },
   header: {
-    height: 50,
+    height: 60,
     backgroundColor: '#373737',
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 20,
   },
   icon: {
-    width: 20,
-    height: 20,
-    marginLeft: 5,
+    fontSize: 18,
+    color: 'white',
     marginRight: 15,
   },
   headerTitle: {

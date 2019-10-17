@@ -13,8 +13,8 @@ import {
 } from 'react-native';
 import firebase from 'firebase';
 import {validate} from '@babel/types';
-import { postUser } from '../redux/action/user'
-import { connect } from 'react-redux'
+import {postUser} from '../redux/action/user';
+import {connect} from 'react-redux';
 
 const {width, height} = Dimensions.get('window');
 
@@ -65,7 +65,7 @@ const Register = props => {
       await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(async({user}) => {
+        .then(async ({user}) => {
           setLoading(false);
           firebase.auth().currentUser.updateProfile({
             displayName: username,
@@ -88,10 +88,18 @@ const Register = props => {
                 longitude: 0,
               },
             });
-          props.dispatch(postUser({ uid: user.uid, email: user.email, username: username })).then(() => {
-            props.navigation.navigate('Home');
-            ToastAndroid.show("Let's Play", ToastAndroid.LONG, ToastAndroid.CENTER);
-          })
+          props
+            .dispatch(
+              postUser({uid: user.uid, email: user.email, username: username}),
+            )
+            .then(() => {
+              props.navigation.navigate('Home');
+              ToastAndroid.show(
+                "Let's Play",
+                ToastAndroid.LONG,
+                ToastAndroid.CENTER,
+              );
+            });
         });
     }
   };
@@ -171,7 +179,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: width / 2,
-    height: height / 21,
+    height: height / 23,
     resizeMode: 'stretch',
     marginBottom: 40,
   },

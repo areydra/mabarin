@@ -6,6 +6,7 @@ import {
   Image,
   View,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import firebase from 'firebase';
@@ -24,6 +25,22 @@ const More = props => {
         props.navigation.navigate('Login');
       })
       .catch(error => console.log(error));
+  };
+
+  const confirmation = () => {
+    Alert.alert(
+      'Log Out',
+      'Are you sure want to log out this Mabarin account?',
+      [
+        {
+          text: 'NO',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {text: 'YES', onPress: () => logOut()},
+      ],
+      {cancelable: true},
+    );
   };
 
   return (
@@ -48,7 +65,9 @@ const More = props => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.8}>
+          <TouchableOpacity
+            onPress={() => alert('Contact Us')}
+            activeOpacity={0.8}>
             <View style={styles.menu}>
               <Text style={styles.menuText}>Contact Us</Text>
               <Image
@@ -57,7 +76,9 @@ const More = props => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.8}>
+          <TouchableOpacity
+            onPress={() => alert('About Mabarin')}
+            activeOpacity={0.8}>
             <View style={styles.menu}>
               <Text style={styles.menuText}>About Mabarin</Text>
               <Image
@@ -66,7 +87,7 @@ const More = props => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('hello')} activeOpacity={0.8}>
+          <TouchableOpacity onPress={() => alert('Others')} activeOpacity={0.8}>
             <View style={styles.menu}>
               <Text style={styles.menuText}>Others</Text>
               <Image
@@ -75,7 +96,7 @@ const More = props => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={logOut} activeOpacity={0.8}>
+          <TouchableOpacity onPress={confirmation} activeOpacity={0.8}>
             <View style={[styles.menu, {backgroundColor: 'whitesmoke'}]}>
               <Text style={styles.menuTextLogout}>Logout</Text>
             </View>
