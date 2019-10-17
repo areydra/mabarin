@@ -91,6 +91,7 @@ class Maps extends Component {
     this.props.navigation.addListener('didFocus', () =>
       this.setState({inChat: false}),
     );
+    this.setState({run: 1});
   };
 
   getMessage = personUid => {
