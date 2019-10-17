@@ -113,7 +113,7 @@ const Home = props => {
               ) : (
                 <View style={styles.loadingBox}>
                   <ActivityIndicator
-                    color="#006aeb"
+                    color=" "
                     size="large"
                     style={styles.loading}
                   />
