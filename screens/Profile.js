@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   PermissionsAndroid,
+  ScrollView,
 } from 'react-native';
 import {Header, Left, Right, Body, Icon} from 'native-base';
 import firebase from 'firebase';
@@ -121,11 +122,13 @@ const Profile = props => {
           )}
         </View>
         <Text style={styles.open}>Mabar History</Text>
-        {props.userData.length === 0
-          ? null
-          : props.userData.mabarhistory.map((item, index) => {
-              return <Card key={index} data={item} />;
-            })}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {props.userData.length === 0
+            ? null
+            : props.userData.mabarhistory.map((item, index) => {
+                return <Card key={index} data={item} />;
+              })}
+        </ScrollView>
       </View>
     </Fragment>
   );
