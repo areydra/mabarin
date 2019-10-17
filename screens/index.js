@@ -10,6 +10,7 @@ import Profile from './Profile';
 import Register from './Register';
 import SplashScreen from './SplashScreen';
 import EditProfile from './editProfile';
+import FriendsProfile from './FriendsProfile';
 
 export {
   BuyPremium,
@@ -24,4 +25,5 @@ export {
   Register,
   SplashScreen,
   EditProfile,
+  FriendsProfile,
 };

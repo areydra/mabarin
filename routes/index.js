@@ -18,6 +18,7 @@ import {
   Register,
   SplashScreen,
   EditProfile,
+  FriendsProfile,
 } from '../screens';
 
 import {Dimensions} from 'react-native';
@@ -32,6 +33,7 @@ const HomeStack = createStackNavigator(
     Chat,
     Profile,
     EditProfile,
+    FriendsProfile,
   },
   {
     initialRouteName: 'Home',
@@ -41,7 +43,11 @@ const HomeStack = createStackNavigator(
       let {routeName} = navigation.state.routes[navigation.state.index];
       let navigationOptions = {};
 
-      if (routeName === 'Maps' || routeName === 'Chat') {
+      if (
+        routeName === 'Maps' ||
+        routeName === 'Chat' ||
+        routeName === 'FriendsProfile'
+      ) {
         navigationOptions.tabBarVisible = false;
       }
 
