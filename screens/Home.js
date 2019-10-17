@@ -18,6 +18,9 @@ import {getEventList} from '../redux/action/eventList';
 const {width, height} = Dimensions.get('window');
 const Home = props => {
   const [data, setData] = useState('');
+  const [event, setEvent] = useState('');
+  const [game, setGame] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const user = firebase.auth().currentUser;
 
@@ -29,6 +32,7 @@ const Home = props => {
   };
 
   const getData = async () => {
+    setLoading(true);
     const user = firebase.auth().currentUser;
     await props.dispatch(getGameList());
     await props.dispatch(getEventList());
@@ -42,6 +46,9 @@ const Home = props => {
 
         if (data !== null) {
           setData(data);
+          setLoading(false);
+        } else {
+          setLoading(false);
         }
       });
   };
@@ -81,7 +88,7 @@ const Home = props => {
         <ScrollView>
           <TouchableOpacity onPress={goProfile} activeOpacity={0.8}>
             <View style={styles.header}>
-              {data ? (
+              {!loading ? (
                 <>
                   <View style={styles.boxImg}>
                     <Image
@@ -121,7 +128,15 @@ const Home = props => {
               )}
             </View>
           </TouchableOpacity>
-          {props.eventList.length > 0 && props.gameList.length > 0 ? (
+          {loading ? (
+            <View style={styles.loadingBox2}>
+              <ActivityIndicator
+                color="#006aeb"
+                size="large"
+                style={styles.loading2}
+              />
+            </View>
+          ) : (
             <>
               <Text style={styles.eventText}>Coming Soon Event</Text>
               <View>
@@ -130,8 +145,11 @@ const Home = props => {
                   showsHorizontalScrollIndicator={false}>
                   {props.eventList.map((data, index) => {
                     return (
-                      <TouchableOpacity activeOpacity={0.8} onPress={goEvent}>
-                        <View key={index} style={styles.eventBox}>
+                      <TouchableOpacity
+                        key={index}
+                        activeOpacity={0.8}
+                        onPress={goEvent}>
+                        <View style={styles.eventBox}>
                           <Image
                             style={styles.eventImg}
                             source={{uri: data.image}}
@@ -152,9 +170,10 @@ const Home = props => {
                   {props.gameList.map((data, index) => {
                     return (
                       <TouchableOpacity
+                        key={index}
                         activeOpacity={0.8}
                         onPress={() => goMaps(data.name, data._id)}>
-                        <View key={index} style={styles.gameImgBox}>
+                        <View style={styles.gameImgBox}>
                           <Image
                             style={styles.gameImg}
                             source={{uri: data.image}}
@@ -166,14 +185,6 @@ const Home = props => {
                 </View>
               </View>
             </>
-          ) : (
-            <View style={styles.loadingBox2}>
-              <ActivityIndicator
-                color="#006aeb"
-                size="large"
-                style={styles.loading2}
-              />
-            </View>
           )}
         </ScrollView>
       </View>

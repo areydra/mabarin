@@ -6,9 +6,11 @@ import {
   Dimensions,
   View,
   Image,
+  ToastAndroid,
 } from 'react-native';
 import {GiftedChat, Bubble, InputToolbar, Send} from 'react-native-gifted-chat';
 import {Icon} from 'native-base';
+import {connect} from 'react-redux';
 
 import firebase from 'firebase';
 
@@ -22,7 +24,7 @@ class Chat extends Component {
       friendData: {},
       user: {},
       text: '',
-      statusMatch: '',
+      statusMatch: ''
     };
   }
 
@@ -56,6 +58,7 @@ class Chat extends Component {
 
   onSend = () => {
     if (this.state.text.length > 0) {
+      this.props.navigation.state.params.onResetRunNotif;
       let msgId = firebase
         .database()
         .ref('messages')
@@ -98,10 +101,19 @@ class Chat extends Component {
   };
 
   invite = () => {
-    firebase
-      .database()
-      .ref('users/' + this.state.friendData.id)
-      .update({statusMatch: 'invited'});
+    if (this.state.user.statusMatch !== 'Invited') {
+      firebase
+        .database()
+        .ref('users/' + this.state.friendData.id)
+        .update({statusMatch: 'invited'});
+    } else {
+
+      ToastAndroid.show(
+        'Udah ada yang punya kak',
+        ToastAndroid.LONG,
+        ToastAndroid.CENTER,
+      );
+    }
   };
 
   renderSend(props) {
@@ -143,13 +155,16 @@ class Chat extends Component {
     );
   }
 
-  acceptInvite = () => {
-    firebase
+  acceptInvite = async () => {
+    await this.props.dispatch(this.state.user.id, { game: this.state.user.matching, friendUid: this.state.friendData.uid, name: this.state.friendData.username })
+    await this.props.dispatch(this.state.friendData.id, { game: this.state.friendData.matching, friendUid: this.state.user.uid, name: this.state.user.username })
+
+    await firebase
       .database()
       .ref('users/' + this.state.friendData.id)
       .update({statusMatch: 'inMatch'});
 
-    firebase
+    await firebase
       .database()
       .ref('users/' + this.state.user.uid)
       .update({statusMatch: 'inMatch'});
@@ -166,7 +181,6 @@ class Chat extends Component {
 
   render() {
     const {friendData} = this.state;
-    console.log('state StatusMatch', this.state.statusMatch);
     return (
       <Fragment>
         {/* Overlay Notif */
@@ -350,4 +364,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Chat;
+export default connect()(Chat);
