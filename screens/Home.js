@@ -18,8 +18,8 @@ import {getEventList} from '../redux/action/eventList';
 const {width, height} = Dimensions.get('window');
 const Home = props => {
   const [data, setData] = useState('');
-  const [event, setEvent] = useState('');
-  const [game, setGame] = useState('');
+  // const [event, setEvent] = useState('');
+  // const [game, setGame] = useState('');
   const [loading, setLoading] = useState(true);
 
   const user = firebase.auth().currentUser;
@@ -32,25 +32,25 @@ const Home = props => {
   };
 
   const getData = async () => {
-    setLoading(true);
     const user = firebase.auth().currentUser;
-    await props.dispatch(getGameList());
-    await props.dispatch(getEventList());
 
     await firebase
       .database()
       .ref(`users/${user.uid}`)
 
-      .on('value', result => {
+      .on('value', async result => {
         let data = result.val();
 
         if (data !== null) {
           setData(data);
-          setLoading(false);
-        } else {
-          setLoading(false);
         }
       });
+  };
+  const getbackend = async () => {
+    setLoading(true);
+    await props.dispatch(getGameList());
+    await props.dispatch(getEventList());
+    setLoading(false);
   };
 
   const goMaps = (match, id) => {
@@ -76,11 +76,13 @@ const Home = props => {
   };
 
   useEffect(() => {
+    getbackend();
     getData();
     setMatching();
   }, []);
 
   const name = data.username;
+  console.log(loading);
 
   return (
     <Fragment>
@@ -88,7 +90,7 @@ const Home = props => {
         <ScrollView>
           <TouchableOpacity onPress={goProfile} activeOpacity={0.8}>
             <View style={styles.header}>
-              {!loading ? (
+              {data ? (
                 <>
                   <View style={styles.boxImg}>
                     <Image

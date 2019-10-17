@@ -27,9 +27,9 @@ const Profile = props => {
     getUsers();
   }, []);
 
-  const getUsers = () => {
+  const getUsers = async () => {
     const user = firebase.auth().currentUser;
-    props.dispatch(getUser(user.uid));
+    await props.dispatch(getUser(user.uid));
     firebase
       .database()
       .ref(`users/${user.uid}`)
