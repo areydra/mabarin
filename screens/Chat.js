@@ -11,8 +11,9 @@ import {
 import {GiftedChat, Bubble, InputToolbar, Send} from 'react-native-gifted-chat';
 import {Icon} from 'native-base';
 import {connect} from 'react-redux';
-
 import firebase from 'firebase';
+
+import { sendHistory } from '../redux/action/user'
 
 const {width} = Dimensions.get('window');
 
@@ -157,21 +158,19 @@ class Chat extends Component {
   }
 
   acceptInvite = async () => {
-    console.log('user', this.state.user)
-    console.log('friend data', this.state.friendData)
-    // await this.props.dispatch(this.state.user.id, { game: this.state.user.matching, friendUid: this.state.friendData.uid, name: this.state.friendData.username })
-    // await this.props.dispatch(this.state.friendData.id, { game: this.state.friendData.matching, friendUid: this.state.user.uid, name: this.state.user.username })
+    await this.props.dispatch(sendHistory(this.state.user.id, { game: this.state.user.matching, friendUid: this.state.friendData.uid, name: this.state.friendData.username }))
+    await this.props.dispatch(sendHistory(this.state.friendData.id, { game: this.state.friendData.matching, friendUid: this.state.user.uid, name: this.state.user.username }))
 
-    // await firebase
-    //   .database()
-    //   .ref('users/' + this.state.friendData.id)
-    //   .update({statusMatch: 'inMatch'});
+    await firebase
+      .database()
+      .ref('users/' + this.state.friendData.id)
+      .update({statusMatch: 'inMatch'});
 
-    // await firebase
-    //   .database()
-    //   .ref('users/' + this.state.user.uid)
-    //   .update({statusMatch: 'inMatch'});
-    // this.setState({statusMatch: null});
+    await firebase
+      .database()
+      .ref('users/' + this.state.user.uid)
+      .update({statusMatch: 'inMatch'});
+    this.setState({statusMatch: null});
   };
 
   declineInvite = () => {
@@ -223,7 +222,8 @@ class Chat extends Component {
               </View>
             </View>
           </View>
-        ) : null}
+        ) : null
+        }
         {/* Overlay Notif END */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>

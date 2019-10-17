@@ -25,6 +25,7 @@ class MabarHistory extends Component {
     const user = firebase.auth().currentUser;
 
     await this.props.dispatch(getUser(user.uid));
+    console.log(this.props.userData)
   };
 
   render() {
