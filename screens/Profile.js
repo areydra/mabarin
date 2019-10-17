@@ -79,7 +79,7 @@ const Profile = props => {
               <View style={styles.profileBox}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text style={styles.name}>
-                    {name.length > 8 ? name.substr(0, 8) + '...' : name}
+                    {name.length > 6 ? name.substr(0, 6) + '...' : name}
                   </Text>
                   <TouchableOpacity onPress={goEditProfile}>
                     <Icon
