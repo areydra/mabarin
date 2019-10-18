@@ -7,13 +7,14 @@ import {
   View,
   Image,
   ToastAndroid,
+  TouchableHightLight,
 } from 'react-native';
 import {GiftedChat, Bubble, InputToolbar, Send} from 'react-native-gifted-chat';
 import {Icon} from 'native-base';
 import {connect} from 'react-redux';
 import firebase from 'firebase';
 
-import { sendHistory } from '../redux/action/user'
+import {sendHistory} from '../redux/action/user';
 
 const {width} = Dimensions.get('window');
 
@@ -25,7 +26,7 @@ class Chat extends Component {
       friendData: {},
       user: {},
       text: '',
-      statusMatch: ''
+      statusMatch: '',
     };
   }
 
@@ -108,14 +109,22 @@ class Chat extends Component {
         .ref('users/' + this.state.friendData.id)
         .update({statusMatch: 'invited'});
     } else {
-
       ToastAndroid.show(
         'Udah ada yang punya kak',
         ToastAndroid.LONG,
         ToastAndroid.CENTER,
       );
     }
-    this.setState({ statusMatch: 'inMatch' });
+    this.setState({statusMatch: 'inMatch'});
+
+    firebase
+      .database()
+      .ref('users/' + this.state.friendData.id)
+      .on('child_changed', friend => {
+        if (friend.val().statusMatch === undefined) {
+          this.props.navigation.navigate('Home');
+        }
+      });
   };
 
   renderSend(props) {
@@ -158,19 +167,33 @@ class Chat extends Component {
   }
 
   acceptInvite = async () => {
-    await this.props.dispatch(sendHistory(this.state.user.id, { game: this.state.user.matching, friendUid: this.state.friendData.uid, name: this.state.friendData.username }))
-    await this.props.dispatch(sendHistory(this.state.friendData.id, { game: this.state.friendData.matching, friendUid: this.state.user.uid, name: this.state.user.username }))
-
+    let date = Date.now();
+    await this.props.dispatch(
+      sendHistory(this.state.user.uid, {
+        game: this.state.friendData.game,
+        friendUid: this.state.friendData.id,
+        name: this.state.friendData.username,
+        date: date,
+      }),
+    );
+    await this.props.dispatch(
+      sendHistory(this.state.friendData.id, {
+        game: this.state.friendData.game,
+        friendUid: this.state.user.uid,
+        name: this.state.user.displayName,
+        date: date,
+      }),
+    );
     await firebase
       .database()
       .ref('users/' + this.state.friendData.id)
       .update({statusMatch: 'inMatch'});
-
     await firebase
       .database()
       .ref('users/' + this.state.user.uid)
       .update({statusMatch: 'inMatch'});
     this.setState({statusMatch: null});
+    this.props.navigation.navigate('Home');
   };
 
   declineInvite = () => {
@@ -222,8 +245,7 @@ class Chat extends Component {
               </View>
             </View>
           </View>
-        ) : null
-        }
+        ) : null}
         {/* Overlay Notif END */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
@@ -234,7 +256,12 @@ class Chat extends Component {
             />
           </TouchableOpacity>
 
-          <View style={styles.headSub}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.headSub}
+            onPress={() =>
+              this.props.navigation.navigate('FriendsProfile', friendData)
+            }>
             <View style={styles.img}>
               <Image source={{uri: friendData.photo}} style={styles.image} />
             </View>
@@ -244,7 +271,7 @@ class Chat extends Component {
               </Text>
               <Text style={{color: 'white'}}>{friendData.status}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
           {this.state.statusMatch !== 'inMatch' ? (
             <View style={styles.but}>
               <TouchableOpacity

@@ -39,13 +39,14 @@ const editProfile = props => {
       .on('value', datas => {
         let data = datas.val();
         setImg(data.photo);
+        setUserName(data.username);
       });
   };
 
   const onSave = async () => {
     const user = firebase.auth().currentUser.uid;
     if (userName.length < 3) {
-      ToastAndroid.show('Min Lenght 3', ToastAndroid.LONG, ToastAndroid.CENTER);
+      ToastAndroid.show('Min Length 3', ToastAndroid.LONG, ToastAndroid.CENTER);
     } else {
       await firebase
         .database()
@@ -121,26 +122,33 @@ const editProfile = props => {
 
   return (
     <Fragment>
-      <Header androidStatusBarColor="gray" style={styles.header}>
-        <Left>
-          <TouchableOpacity onPress={goProfile}>
-            <Icon style={styles.icon} type="AntDesign" name="left" />
-          </TouchableOpacity>
-        </Left>
-        <Body></Body>
-      </Header>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={goProfile}>
+          <Icon type="AntDesign" name="left" style={styles.icon} />
+        </TouchableOpacity>
+
+        <Text style={styles.textHeader}>Edit Profile</Text>
+      </View>
 
       <View style={styles.container}>
-        <View style={styles.title}>
-          <Text style={styles.texTitle}>Edit Profile</Text>
-        </View>
-        <TouchableOpacity onPress={imagePic}>
+        <View style={styles.imgContainer}>
           <View style={styles.imgBox}>
             <Image style={styles.img} source={{uri: img}} />
           </View>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={imagePic}
+            style={styles.buttonImage}
+            activeOpacity={0.9}>
+            <Icon
+              type="Entypo"
+              name="camera"
+              style={{color: 'white', fontSize: 17}}
+            />
+          </TouchableOpacity>
+        </View>
         <View style={styles.nameBox}>
           <TextInput
+            defaultValue={userName}
             placeholder="UserName"
             placeholderTextColor="white"
             style={styles.input}
@@ -158,6 +166,21 @@ const editProfile = props => {
 };
 
 const styles = StyleSheet.create({
+  imgContainer: {
+    alignItems: 'center',
+    paddingBottom: 20,
+  },
+  buttonImage: {
+    height: 30,
+    width: 30,
+    backgroundColor: '#00000090',
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -55,
+    marginRight: -75,
+    zIndex: 2,
+  },
   container: {
     flex: 1,
     backgroundColor: '#232323',
@@ -166,19 +189,27 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: 'white',
-    fontSize: 15,
+    fontSize: 18,
   },
   header: {
     backgroundColor: '#373737',
+    paddingHorizontal: 20,
+    width: '100%',
+    height: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textHeader: {
+    color: 'white',
+    fontSize: 20,
+    marginLeft: 20,
+    fontWeight: '700',
   },
   title: {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  texTitle: {
-    fontSize: 20,
-    color: 'white',
-  },
+
   imgBox: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -206,12 +237,16 @@ const styles = StyleSheet.create({
   btnBox: {
     borderColor: '#3355ff',
     borderWidth: 1,
-    borderRadius: 7,
+    borderRadius: 5,
     marginVertical: 30,
+
+    width: 80,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   btn: {
     color: '#3355ff',
-    padding: 10,
   },
 });
 

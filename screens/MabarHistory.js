@@ -21,11 +21,12 @@ class MabarHistory extends Component {
     };
   }
 
-  componentDidMount = async () => {
+  componentDidMount = () => {
     const user = firebase.auth().currentUser;
 
-    await this.props.dispatch(getUser(user.uid));
-    console.log(this.props.userData)
+    this.props.navigation.addListener('didFocus', async () => {
+      await this.props.dispatch(getUser(user.uid));
+    });
   };
 
   render() {

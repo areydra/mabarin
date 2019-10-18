@@ -27,16 +27,19 @@ const Card = props => {
         [{text: 'Ok', style: 'destructive'}],
       );
     }
-
     let user = firebase.auth().currentUser;
     await props.dispatch(
       sendRatingFriend(user.uid, {
         game: props.data.game,
         rating: rating,
-        friendUid: props.data.friendUid,
+        friendUid: user.uid,
         date: props.data.date,
       }),
     );
+    await firebase
+      .database()
+      .ref('users/' + user.uid)
+      .update({statusMatch: null});
   };
   Moment.locale('en');
   return (
@@ -60,45 +63,135 @@ const Card = props => {
               {Moment(props.data.date).format('D MMM, YYYY, h:mm:ss a')}
             </Text>
           </View>
-          <View>
+          {!props.data.rating ? (
+            <View>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.buttonDone}
+                onPress={sendRating}>
+                <Text style={{color: 'white'}}>SELESAI</Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
+        </View>
+      </View>
+      {!props.data.rating ? (
+        <View style={styles.bottom}>
+          <Text
+            style={{
+              color: 'white',
+            }}>
+            Rate Your Friends
+          </Text>
+          <View style={styles.rateContainer}>
             <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.buttonDone}
-              onPress={sendRating}>
-              <Text style={{color: 'red'}}>SELESAI</Text>
+              onPress={() => setRating(1)}
+              style={[
+                styles.rateButton,
+                rating === 1 || props.data.rating
+                  ? {
+                      borderColor: '#006aeb',
+                      backgroundColor: '#006aeb',
+                    }
+                  : {
+                      borderColor: 'grey',
+                    },
+              ]}>
+              <Text
+                style={[
+                  styles.rateText,
+                  {color: rating === 1 ? 'black' : 'grey'},
+                ]}>
+                TAY!
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setRating(2)}
+              style={[
+                styles.rateButton,
+                rating === 2
+                  ? {
+                      borderColor: '#006aeb',
+                      backgroundColor: '#006aeb',
+                    }
+                  : {
+                      borderColor: 'grey',
+                    },
+              ]}>
+              <Text
+                style={[
+                  styles.rateText,
+                  {color: rating === 2 ? 'black' : 'grey'},
+                ]}>
+                BLOKK!
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setRating(3)}
+              style={[
+                styles.rateButton,
+                rating === 3
+                  ? {
+                      borderColor: '#006aeb',
+                      backgroundColor: '#006aeb',
+                    }
+                  : {
+                      borderColor: 'grey',
+                    },
+              ]}>
+              <Text
+                style={[
+                  styles.rateText,
+                  {color: rating === 3 ? 'black' : 'grey'},
+                ]}>
+                NOOB
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setRating(4)}
+              style={[
+                styles.rateButton,
+                rating === 4
+                  ? {
+                      borderColor: '#006aeb',
+                      backgroundColor: '#006aeb',
+                    }
+                  : {
+                      borderColor: 'grey',
+                    },
+              ]}>
+              <Text
+                style={[
+                  styles.rateText,
+                  {color: rating === 4 ? 'black' : 'grey'},
+                ]}>
+                MAYAN
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setRating(5)}
+              style={[
+                styles.rateButton,
+                rating === 5
+                  ? {
+                      borderColor: '#006aeb',
+                      backgroundColor: '#006aeb',
+                    }
+                  : {
+                      borderColor: 'grey',
+                    },
+              ]}>
+              <Text
+                style={[
+                  styles.rateText,
+                  {color: rating === 5 ? 'black' : 'grey'},
+                ]}>
+                MANTUL
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
-      </View>
-      <View style={styles.bottom}>
-        <Text
-          style={{
-            color: 'white',
-          }}>
-          Rate Your Friends
-        </Text>
-        <View style={styles.rateContainer}>
-          <TouchableOpacity
-            style={[styles.rateButton, {borderColor: '#8c3e1c'}]}>
-            <Text style={[styles.rateText, {color: '#8c3e1c'}]}>BRONZE</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.rateButton, {borderColor: 'silver'}]}>
-            <Text style={[styles.rateText, {color: 'silver'}]}>SILVER</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.rateButton, {borderColor: '#edcd2b'}]}>
-            <Text style={[styles.rateText, {color: '#edcd2b'}]}>GOLD</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.rateButton, {borderColor: '#16de5c'}]}>
-            <Text style={[styles.rateText, {color: '#16de5c'}]}>DIAMOND</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.rateButton, {borderColor: 'white'}]}>
-            <Text style={[styles.rateText, {color: 'white'}]}>PLATINUM</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      ) : null}
     </Fragment>
   );
 };
@@ -131,7 +224,7 @@ const styles = StyleSheet.create({
   },
   buttonDone: {
     borderWidth: 1,
-    borderColor: 'red',
+    backgroundColor: '#ad0005',
     padding: 5,
     borderRadius: 3,
   },

@@ -18,11 +18,9 @@ import {getUser} from '../redux/action/user';
 
 const {width, height} = Dimensions.get('window');
 
-const Profile = props => {
+const FriendsProfile = props => {
   const [data, setData] = useState('');
-  const [img, setImg] = useState('');
-  const [username, setUserName] = useState('');
-  const [match, setMatch] = useState('');
+  const [myStatus, setMyStatus] = useState('');
 
   useEffect(() => {
     getUsers();
@@ -30,36 +28,28 @@ const Profile = props => {
 
   const getUsers = async () => {
     const user = firebase.auth().currentUser;
-    await props.dispatch(getUser(user.uid));
+
+    await setData(props.navigation.state.params);
+    await props.dispatch(getUser(data.id));
     firebase
       .database()
       .ref(`users/${user.uid}`)
 
       .on('value', datas => {
         let data = datas.val();
-        setImg(data.photo);
-        setData(data);
-        setUserName(data.username);
-        setMatch(data.mabarhistory);
+        setMyStatus(data.premium);
       });
   };
-  const name = username;
 
-  const goHome = () => {
-    props.navigation.navigate('Home');
+  const goBack = () => {
+    props.navigation.goBack();
   };
-  const goEditProfile = () => {
-    props.navigation.navigate('EditProfile');
-  };
-
   return (
     <Fragment>
       <View style={styles.header}>
-        <TouchableOpacity onPress={goHome}>
+        <TouchableOpacity onPress={goBack}>
           <Icon type="AntDesign" name="left" style={styles.icon} />
         </TouchableOpacity>
-
-        <Text style={styles.textHeader}>Profile</Text>
       </View>
       <View style={styles.container}>
         <View style={styles.userProfile}>
@@ -69,7 +59,7 @@ const Profile = props => {
                 <Image
                   style={styles.img}
                   source={{
-                    uri: img,
+                    uri: data.photo,
                   }}
                 />
               </View>
@@ -77,36 +67,33 @@ const Profile = props => {
               <View style={styles.profileBox}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text style={styles.name}>
-                    {name.length > 6 ? name.substr(0, 6) + '...' : name}
+                    {data.username.length > 6
+                      ? data.username.substr(0, 6) + '...'
+                      : data.username}
                   </Text>
-                  <TouchableOpacity onPress={goEditProfile}>
-                    <Icon
-                      type="MaterialCommunityIcons"
-                      name="square-edit-outline"
-                      style={{color: 'white', fontSize: 20}}
-                    />
-                  </TouchableOpacity>
                 </View>
 
-                <Text style={styles.match}>{match.length} Match</Text>
+                <Text style={styles.match}>
+                  {props.userData.mabarhistory.length}
+                  &nbsp;Match
+                </Text>
               </View>
               <View style={styles.statusBox}>
-                {data.premium ? (
-                  <>
-                    <View style={styles.premiumBox}>
-                      <Text style={styles.premium}>PREMIUM</Text>
-                    </View>
-                  </>
-                ) : (
-                  <>
-                    <TouchableOpacity
-                      activeOpacity={0.9}
-                      style={styles.premiumBoxOf}
-                      onPress={() => props.navigation.navigate('BuyPremium')}>
-                      <Text style={styles.premiumOf}>BASIC</Text>
-                    </TouchableOpacity>
-                  </>
-                )}
+                {myStatus === true ? (
+                  data.premium ? (
+                    <>
+                      <View style={styles.premiumBox}>
+                        <Text style={styles.premium}>PREMIUM</Text>
+                      </View>
+                    </>
+                  ) : (
+                    <>
+                      <View activeOpacity={0.9} style={styles.premiumBoxOf}>
+                        <Text style={styles.premiumOf}>BASIC</Text>
+                      </View>
+                    </>
+                  )
+                ) : null}
               </View>
             </>
           ) : (
@@ -134,7 +121,7 @@ const Profile = props => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#373737',
+    backgroundColor: '#232323',
     paddingHorizontal: 20,
     width: '100%',
     height: 60,
@@ -287,4 +274,4 @@ const mapStateToProps = state => {
     userData: state.user.currentUser,
   };
 };
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps)(FriendsProfile);

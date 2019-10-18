@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: width / 2,
-    height: height / 21,
+    height: height / 23,
     resizeMode: 'stretch',
     marginBottom: width / 6,
   },
