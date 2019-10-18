@@ -14,6 +14,7 @@ import firebase from 'firebase';
 import {connect} from 'react-redux';
 import {getGameList} from '../redux/action/gameList';
 import {getEventList} from '../redux/action/eventList';
+import {getUser} from '../redux/action/user';
 
 const {width, height} = Dimensions.get('window');
 const Home = props => {
@@ -48,6 +49,8 @@ const Home = props => {
   };
   const getbackend = async () => {
     setLoading(true);
+    await props.dispatch(getUser(user.uid));
+
     await props.dispatch(getGameList());
     await props.dispatch(getEventList());
     setLoading(false);
@@ -106,7 +109,7 @@ const Home = props => {
                     </Text>
 
                     <Text style={styles.match}>
-                      {data.mabarhistory.length} Match
+                      {props.userData.mabarhistory.length} Match
                     </Text>
                   </View>
                   <View style={styles.statusBox}>
@@ -348,6 +351,7 @@ const mapStateToProps = state => {
   return {
     gameList: state.gameList.gameList,
     eventList: state.eventList.eventList,
+    userData: state.user.currentUser,
   };
 };
 
