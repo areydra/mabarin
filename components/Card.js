@@ -31,6 +31,7 @@ const Card = props => {
     let user = firebase.auth().currentUser;
     await props.dispatch(
       sendRatingFriend(user.uid, {
+        game: props.data.game,
         rating: rating,
         friendUid: props.data.friendUid,
         date: props.data.date,
