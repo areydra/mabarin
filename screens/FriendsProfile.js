@@ -44,11 +44,17 @@ const FriendsProfile = props => {
   const goBack = () => {
     props.navigation.goBack();
   };
+
   return (
     <Fragment>
       <View style={styles.header}>
         <TouchableOpacity onPress={goBack}>
-          <Icon type="AntDesign" name="left" style={styles.icon} />
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Icon type="AntDesign" name="left" style={styles.icon} />
+            <Text style={{fontSize: 17, color: 'white', marginLeft: 10}}>
+              {data.username} Profile
+            </Text>
+          </View>
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
@@ -67,14 +73,14 @@ const FriendsProfile = props => {
               <View style={styles.profileBox}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text style={styles.name}>
-                    {data.username.length > 6
-                      ? data.username.substr(0, 6) + '...'
-                      : data.username}
+                    {props.userData.username.length > 6
+                      ? props.userData.username.substr(0, 6) + '...'
+                      : props.userData.username}
                   </Text>
                 </View>
 
                 <Text style={styles.match}>
-                  {props.userData.mabarhistory.length}
+                  <Text style={styles.match}>100 Match</Text>
                   &nbsp;Match
                 </Text>
               </View>
@@ -108,11 +114,11 @@ const FriendsProfile = props => {
         </View>
         <Text style={styles.open}>Mabar History</Text>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {props.userData.length === 0
-            ? null
-            : props.userData.mabarhistory.map((item, index) => {
+          {props.userData
+            ? props.userData.mabarhistory.map((item, index) => {
                 return <Card key={index} data={item} />;
-              })}
+              })
+            : null}
         </ScrollView>
       </View>
     </Fragment>

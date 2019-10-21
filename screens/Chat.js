@@ -75,7 +75,6 @@ class Chat extends Component {
         user: {
           _id: this.state.user.uid,
           name: this.state.user.displayName,
-          // avatar: this.state.avatar,
         },
       };
       updates[

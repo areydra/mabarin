@@ -7,12 +7,10 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-  Alert,
   ActivityIndicator,
   ToastAndroid,
 } from 'react-native';
 import firebase from 'firebase';
-import {validate} from '@babel/types';
 import {postUser} from '../redux/action/user';
 import {connect} from 'react-redux';
 
@@ -30,7 +28,6 @@ const Register = props => {
     const validPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,25}$/gim;
     let checkEmail = email.match(validEmail);
     let checkPassword = password.match(validPass);
-    console.log('validasi', checkEmail, checkPassword);
 
     setLoading(true);
     if (checkEmail === null) {

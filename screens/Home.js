@@ -19,8 +19,6 @@ import {getUser} from '../redux/action/user';
 const {width, height} = Dimensions.get('window');
 const Home = props => {
   const [data, setData] = useState('');
-  // const [event, setEvent] = useState('');
-  // const [game, setGame] = useState('');
   const [loading, setLoading] = useState(true);
 
   const user = firebase.auth().currentUser;
@@ -48,7 +46,6 @@ const Home = props => {
       });
   };
   const getbackend = async () => {
-    setLoading(true);
     await props.dispatch(getUser(user.uid));
 
     await props.dispatch(getGameList());
@@ -85,8 +82,6 @@ const Home = props => {
   }, []);
 
   const name = data.username;
-  console.log(loading);
-
   return (
     <Fragment>
       <View style={styles.container}>
@@ -107,10 +102,7 @@ const Home = props => {
                     <Text style={styles.name}>
                       {name.length > 8 ? name.substr(0, 8) + '...' : name}
                     </Text>
-
-                    <Text style={styles.match}>
-                      {props.userData.mabarhistory.length} Match
-                    </Text>
+                    <Text style={styles.match}>200 Match</Text>
                   </View>
                   <View style={styles.statusBox}>
                     {data.premium ? (
@@ -135,64 +127,54 @@ const Home = props => {
               )}
             </View>
           </TouchableOpacity>
-          {loading ? (
-            <View style={styles.loadingBox2}>
-              <ActivityIndicator
-                color="#006aeb"
-                size="large"
-                style={styles.loading2}
-              />
+          <>
+            <Text style={styles.eventText}>Coming Soon Event</Text>
+            <View>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                {props.eventList.map((data, index) => {
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      activeOpacity={0.8}
+                      onPress={goEvent}>
+                      <View style={styles.eventBox}>
+                        <Image
+                          style={styles.eventImg}
+                          source={{uri: data.image}}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </ScrollView>
             </View>
-          ) : (
-            <>
-              <Text style={styles.eventText}>Coming Soon Event</Text>
-              <View>
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}>
-                  {props.eventList.map((data, index) => {
-                    return (
-                      <TouchableOpacity
-                        key={index}
-                        activeOpacity={0.8}
-                        onPress={goEvent}>
-                        <View style={styles.eventBox}>
-                          <Image
-                            style={styles.eventImg}
-                            source={{uri: data.image}}
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </ScrollView>
-              </View>
-              <Text style={styles.textMabar}>
-                Mabar Now!
-                <Text style={styles.subTit}>&nbsp;&nbsp;Find Your Crew</Text>
-              </Text>
+            <Text style={styles.textMabar}>
+              Mabar Now!
+              <Text style={styles.subTit}>&nbsp;&nbsp;Find Your Crew</Text>
+            </Text>
 
-              <View style={styles.asing}>
-                <View style={styles.game}>
-                  {props.gameList.map((data, index) => {
-                    return (
-                      <TouchableOpacity
-                        key={index}
-                        activeOpacity={0.8}
-                        onPress={() => goMaps(data.name, data._id)}>
-                        <View style={styles.gameImgBox}>
-                          <Image
-                            style={styles.gameImg}
-                            source={{uri: data.image}}
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
+            <View style={styles.asing}>
+              <View style={styles.game}>
+                {props.gameList.map((data, index) => {
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      activeOpacity={0.8}
+                      onPress={() => goMaps(data.name, data._id)}>
+                      <View style={styles.gameImgBox}>
+                        <Image
+                          style={styles.gameImg}
+                          source={{uri: data.image}}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
-            </>
-          )}
+            </View>
+          </>
         </ScrollView>
       </View>
     </Fragment>

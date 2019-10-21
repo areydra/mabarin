@@ -7,10 +7,9 @@ import {
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
-  PermissionsAndroid,
   ScrollView,
 } from 'react-native';
-import {Header, Left, Right, Body, Icon} from 'native-base';
+import {Icon} from 'native-base';
 import firebase from 'firebase';
 import Card from '../components/Card';
 import {connect} from 'react-redux';
@@ -85,10 +84,7 @@ const Profile = props => {
                     />
                   </TouchableOpacity>
                 </View>
-
-                <Text style={styles.match}>
-                  {props.userData.mabarhistory.length} Match
-                </Text>
+                <Text style={styles.match}>200 Match</Text>
               </View>
               <View style={styles.statusBox}>
                 {data.premium ? (
@@ -121,11 +117,11 @@ const Profile = props => {
         </View>
         <Text style={styles.open}>Mabar History</Text>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {props.userData.length === 0
-            ? null
-            : props.userData.mabarhistory.map((item, index) => {
+          {props.userData
+            ? props.userData.mabarhistory.map((item, index) => {
                 return <Card key={index} data={item} />;
-              })}
+              })
+            : null}
         </ScrollView>
       </View>
     </Fragment>

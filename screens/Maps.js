@@ -198,11 +198,11 @@ class Maps extends Component {
 
   render() {
     // this.sendNotification()
-
     const {userId} = this.state;
     const matchUser = this.state.users.filter(
       user => user.matching === this.props.navigation.getParam('match'),
     );
+    console.log('Match User : ', matchUser);
     return (
       <Fragment>
         <View style={styles.header}>
@@ -233,45 +233,50 @@ class Maps extends Component {
               minZoomLevel={0}
               maxZoomLevel={20}
               style={styles.map}>
-              {matchUser.map((item, index) => (
-                <Marker
-                  key={index}
-                  onCalloutPress={async () => {
-                    if (item.id !== userId) {
-                      await this.setState({inChat: true});
-                      this.props.navigation.navigate('Chat', {
-                        ...item,
-                        onResetRunNotif: this.sendNotification(),
-                      });
-                    }
-                  }}
-                  title={item.id == userId ? 'You' : item.username}
-                  coordinate={{
-                    latitude: item.Location.latitude,
-                    longitude: item.Location.longitude,
-                  }}>
-                  {item.id == userId ? (
-                    <View
-                      style={{
-                        width: 80,
-                        height: 80,
+              {matchUser.length
+                ? matchUser.map((item, index) => (
+                    <Marker
+                      key={index}
+                      onCalloutPress={async () => {
+                        if (item.id !== userId) {
+                          await this.setState({inChat: true});
+                          this.props.navigation.navigate('Chat', {
+                            ...item,
+                            onResetRunNotif: this.sendNotification(),
+                          });
+                        }
+                      }}
+                      title={item.id == userId ? 'You' : item.username}
+                      coordinate={{
+                        latitude: item.Location.latitude,
+                        longitude: item.Location.longitude,
                       }}>
-                      <Image
-                        source={Mark}
-                        style={{
-                          flex: 1,
-                          width: '100%',
-                          resizeMode: 'contain',
-                        }}
-                      />
-                    </View>
-                  ) : (
-                    <View style={styles.avatar}>
-                      <Image source={{uri: item.photo}} style={styles.image} />
-                    </View>
-                  )}
-                </Marker>
-              ))}
+                      {item.id == userId ? (
+                        <View
+                          style={{
+                            width: 80,
+                            height: 80,
+                          }}>
+                          <Image
+                            source={Mark}
+                            style={{
+                              flex: 1,
+                              width: '100%',
+                              resizeMode: 'contain',
+                            }}
+                          />
+                        </View>
+                      ) : (
+                        <View style={styles.avatar}>
+                          <Image
+                            source={{uri: item.photo}}
+                            style={styles.image}
+                          />
+                        </View>
+                      )}
+                    </Marker>
+                  ))
+                : null}
             </MapView>
           </View>
         )}

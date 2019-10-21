@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  Image,
-  View,
-  StyleSheet,
-} from 'react-native';
+import {SafeAreaView, ScrollView, Text, View, StyleSheet} from 'react-native';
 
 import Card from '../components/Card';
 import {connect} from 'react-redux';
@@ -30,6 +23,7 @@ class MabarHistory extends Component {
   };
 
   render() {
+    // console.log(this.props.userData);
     return (
       <SafeAreaView style={styles.mabarHistoryContainer}>
         <View style={styles.header}>
@@ -37,7 +31,7 @@ class MabarHistory extends Component {
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
-            {this.props.userData.length === 0
+            {!this.props.userData
               ? null
               : this.props.userData.mabarhistory.map((item, index) => {
                   return <Card key={index} data={item} />;
