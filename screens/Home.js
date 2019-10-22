@@ -82,6 +82,63 @@ const Home = props => {
   }, []);
 
   const name = data.username;
+  
+  const eventList = [
+    {
+      _id: '5da6920c897e944088608e10',
+      name: 'Turnament Mobile Legend',
+      image: 'https://raw.githubusercontent.com/rozy97/pic/master/eventOne.jpg',
+    },
+    {
+      _id: '5da69251454ecb4088a6b3a1',
+      name: 'Turnament PUBG',
+      image: 'https://raw.githubusercontent.com/rozy97/pic/master/eventTwo.jpg',
+    },
+  ];
+  const gameList = [
+    {
+      _id: '5da3ef0e6881903aa8ea1b64',
+      name: 'Mobile Legend',
+      code: 'ML',
+      image: 'https://raw.githubusercontent.com/rozy97/pic/master/ML.jpg',
+    },
+    {
+      _id: '5da3ef575efc4d3aa80c6878',
+      name: 'Vainglory',
+      code: 'VG',
+      image: 'https://raw.githubusercontent.com/rozy97/pic/master/VG.jpg',
+    },
+    {
+      _id: '5da3ef635efc4d3aa80c6879',
+      name: 'data 2 edited again',
+      code: 'PUBG',
+      image: 'https://raw.githubusercontent.com/rozy97/pic/master/PUBG.jpg',
+    },
+    {
+      _id: '5da3ef675efc4d3aa80c687a',
+      name: 'Arena of Valor',
+      code: 'AOV',
+      image: 'https://raw.githubusercontent.com/rozy97/pic/master/AOV.jpg',
+    },
+    {
+      _id: '5da3ef9a5efc4d3aa80c687b',
+      name: 'Tetris',
+      code: 'TE',
+      image: 'https://raw.githubusercontent.com/rozy97/pic/master/TE.jpg',
+    },
+    {
+      _id: '5da436204a726c356080e94d',
+      name: 'Call of Duty',
+      code: 'COD',
+      image: 'https://raw.githubusercontent.com/rozy97/pic/master/COD.jpg',
+    },
+    {
+      _id: '5da9428223d8de2b686c049b',
+      name: 'super mario',
+      image: 'http://picsum.photos/100/100',
+    },
+  ];
+
   return (
     <Fragment>
       <View style={styles.container}>
@@ -133,7 +190,7 @@ const Home = props => {
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
-                {props.eventList.map((data, index) => {
+                {eventList.map((data, index) => {
                   return (
                     <TouchableOpacity
                       key={index}
@@ -157,7 +214,7 @@ const Home = props => {
 
             <View style={styles.asing}>
               <View style={styles.game}>
-                {props.gameList.map((data, index) => {
+                {gameList.map((data, index) => {
                   return (
                     <TouchableOpacity
                       key={index}
