@@ -37,11 +37,13 @@ Mabarin is a app search friends for party game with your genre
 ## Screenshots
   <p align="center">
     <span>
-      <img src="https://imgur.com/2ltPLLe.gif" width="250px" />
+      <img src="https://imgur.com/7DlfIbj.gif" width="250px" />
       &nbsp;&nbsp;
-      <img src="https://imgur.com/34hq0uR.gif" width="250px" />
+      <img src="https://imgur.com/rikf680.gif" width="250px" />
       &nbsp;&nbsp;
-      <img src="https://imgur.com/jW3CSX5.gif" width="250px" />
+      <img src="https://imgur.com/qOQo8L1.gif" width="250px" />
+      &nbsp;&nbsp;
+      <img src="https://imgur.com/fcSDoKH.gif" width="250px" />
     </span>
     
   </p>
@@ -62,8 +64,8 @@ Mabarin is a app search friends for party game with your genre
       </a>
     </td>
     <td align="center">
-      <a href="https://avatars1.githubusercontent.com/u/52324743?s=460&v=4">
-        <img width="110" src="https://github.com/firmansyahfachmi"><br/>
+      <a href="https://github.com/firmansyahfachmi">
+        <img width="110" src="https://avatars1.githubusercontent.com/u/52324743?s=460&v=4"><br/>
           <sub><b>Fachmi Firmansyah</b></sub>
       </a>
     </td>
@@ -74,8 +76,8 @@ Mabarin is a app search friends for party game with your genre
       </a>
     </td>
     <td align="center">
-      <a href="https://avatars1.githubusercontent.com/rozy97">
-        <img width="110" src="https://github.com/rozy97"><br/>
+      <a href="https://github.com/rozy97">
+        <img width="110" src="https://avatars1.githubusercontent.com/rozy97"><br/>
           <sub><b>Firmansyah Rozy</b></sub>
       </a>
     </td>
