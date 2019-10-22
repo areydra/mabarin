@@ -44,7 +44,7 @@ Mabarin is a app search friends for party game with your genre
   </p>
 <p align="center">
     <span>
-      <img src="https://i.imgur.com/qOQo8L1.gif" width="250px" />
+      <img src="https://i.imgur.com/fcSDoKH.gif" width="250px" />
       &nbsp;&nbsp;
       <img src="https://imgur.com/fcSDoKH.gif" width="250px" />
     </span>
