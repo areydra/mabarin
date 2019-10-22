@@ -40,14 +40,15 @@ Mabarin is a app search friends for party game with your genre
       <img src="https://imgur.com/7DlfIbj.gif" width="250px" />
       &nbsp;&nbsp;
       <img src="https://imgur.com/rikf680.gif" width="250px" />
-      &nbsp;&nbsp;
+    </span>
+  </p>
+<p align="center">
+    <span>
       <img src="https://imgur.com/qOQo8L1.gif" width="250px" />
       &nbsp;&nbsp;
       <img src="https://imgur.com/fcSDoKH.gif" width="250px" />
     </span>
-    
   </p>
-
 ## Release APK
 <a href="https://bit.ly/32Ctw3Q">
   Download here
