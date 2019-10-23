@@ -1,7 +1,8 @@
-<h1 align='center'>Mabarin</h1>
+<h1 align='center'>Mabarin</h1><br/><br />
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/52324743/67383988-752b3980-f5ba-11e9-9a7e-909f903e702d.png" width="250px"/>
+  <img src="https://user-images.githubusercontent.com/52324743/67383988-752b3980-f5ba-11e9-9a7e-909f903e702d.png" width="500px"/>
 </p>
+<br/><br />
 
 ## Table of Contents
 
