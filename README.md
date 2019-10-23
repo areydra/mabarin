@@ -1,8 +1,15 @@
-<h1 align='center'>Mabarin</h1><br/><br />
+<h1 align='center'>Mabarin</h1><br/><br /><br />
 <p align="center">
   <img src="https://user-images.githubusercontent.com/52324743/67383988-752b3980-f5ba-11e9-9a7e-909f903e702d.png" width="500px"/>
 </p>
-<br/><br />
+<br/><br /><br />
+
+<a href="#">
+  <img src="https://img.shields.io/badge/React%20Native-0.60-blue.svg?style=flat-square" alt="npm version">
+</a>
+<a href="#">
+  <img src="https://img.shields.io/badge/Firebase-7.2.0-yellow.svg?style=flat-square" alt="npm version">
+</a>
 
 ## Table of Contents
 
