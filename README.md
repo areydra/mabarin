@@ -43,7 +43,7 @@ Mabarin is a app search friends for party game with your genre
 3. Open the folder and type `npm install` for install dependencies
 4. Before run this, you must run mabarin-backend
 5. Set key.js.example from firebase
-6. Add Google Cloud Platform api key on /android/app/src/main/AndroidManifest.xml
+6. Add Google Cloud Platform api key on `/android/app/src/main/AndroidManifest.xml`
 7. Type `react-native run-android` for run this app. ***Make sure your device is connected with debugging mode***.
 
 ## Screenshots
